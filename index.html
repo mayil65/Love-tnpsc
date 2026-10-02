@@ -29,7 +29,7 @@
       </div>
 
       <div class="grid grid-cols-2 gap-3" id="categoryGrid">
-        <!-- Cards injected dynamically -->
+        <!-- Cards dynamically injected -->
       </div>
     </section>
 
@@ -62,7 +62,15 @@
         <p id="expText" class="text-slate-300 leading-relaxed"></p>
       </div>
 
-      <button id="btnNext" onclick="nextQuestion()" class="hidden w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-3 rounded-xl transition shadow-lg text-sm">அடுத்த வினா ➔</button>
+      <!-- Navigation Buttons: Previous & Next -->
+      <div class="flex gap-2 pt-2">
+        <button id="btnPrev" onclick="prevQuestion()" class="hidden flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-3 rounded-xl transition text-sm flex items-center justify-center gap-2 border border-slate-700">
+          <i class="fa-solid fa-arrow-left"></i> முந்தைய வினா
+        </button>
+        <button id="btnNext" onclick="nextQuestion()" class="hidden flex-1 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-3 rounded-xl transition shadow-lg text-sm flex items-center justify-center gap-2">
+          அடுத்த வினா <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
     </section>
 
     <!-- 3. Result Screen -->
@@ -109,15 +117,15 @@
         
         <!-- Toggle Tabs -->
         <div class="flex gap-2 border-b border-slate-800 pb-2">
-          <button id="tabBulkBtn" onclick="switchAdminTab('bulk')" class="flex-1 py-1.5 text-xs font-bold rounded-lg bg-emerald-500 text-slate-950">Gemini Bulk Import (ஒரே கிளிக்கில் 50+ வினாக்கள்)</button>
+          <button id="tabBulkBtn" onclick="switchAdminTab('bulk')" class="flex-1 py-1.5 text-xs font-bold rounded-lg bg-emerald-500 text-slate-950">Gemini Bulk Import</button>
           <button id="tabSingleBtn" onclick="switchAdminTab('single')" class="flex-1 py-1.5 text-xs font-bold rounded-lg bg-slate-800 text-slate-300">தனி வினா சேர்க்க</button>
         </div>
 
-        <!-- 1. Bulk Import Tab (Primary) -->
+        <!-- 1. Bulk Import Tab -->
         <div id="bulkImportTab" class="space-y-3">
-          <p class="text-[11px] text-slate-400">Gemini கொடுக்கும் மொத்த வினாக்களின் குறியீட்டை (JSON Code) அப்படியே கீழே உள்ள பெட்டியில் Paste செய்யவும்:</p>
+          <p class="text-[11px] text-slate-400">Gemini கொடுக்கும் JSON Code-ஐ கீழே ஒட்டவும்:</p>
           <textarea id="bulkJsonInput" placeholder='[&#10;  {&#10;    "category": "பொதுத்தமிழ்",&#10;    "question": "வினா...",&#10;    "options": ["A", "B", "C", "D"],&#10;    "answer": 0,&#10;    "explanation": "விளக்கம்..."&#10;  }&#10;]' class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs h-44 text-emerald-300 font-mono outline-none focus:border-emerald-500"></textarea>
-          <button onclick="importBulkQuestions()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs shadow-lg transition">வினாக்களை ஒரே கிளிக்கில் ஏற்று (Import Questions)</button>
+          <button onclick="importBulkQuestions()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs shadow-lg transition">வினாக்களை ஏற்று (Import Questions)</button>
         </div>
 
         <!-- 2. Single Question Tab -->
@@ -202,8 +210,7 @@
     let currentCategory = "";
     let activeQuestions = [];
     let currentIndex = 0;
-    let score = 0;
-    let selectedAnswer = null;
+    let userAnswers = {};
 
     function renderCategories() {
       const grid = document.getElementById('categoryGrid');
@@ -239,7 +246,7 @@
       document.getElementById('screenQuiz').classList.remove('hidden');
 
       currentIndex = 0;
-      score = 0;
+      userAnswers = {};
       loadQuestion();
     }
 
@@ -255,39 +262,85 @@
     }
 
     function loadQuestion() {
-      selectedAnswer = null;
-      document.getElementById('explanationCard').classList.add('hidden');
-      document.getElementById('btnNext').classList.add('hidden');
-
       const q = activeQuestions[currentIndex];
       document.getElementById('qSubjectTag').textContent = q.category;
       document.getElementById('qCountText').textContent = `வினா ${currentIndex + 1}/${activeQuestions.length}`;
-      document.getElementById('progressBar').style.width = `${((currentIndex) / activeQuestions.length) * 100}%`;
+      document.getElementById('progressBar').style.width = `${((currentIndex + 1) / activeQuestions.length) * 100}%`;
       document.getElementById('qText').textContent = q.question;
+
+      // முந்தைய பட்டன்
+      const btnPrev = document.getElementById('btnPrev');
+      if (currentIndex > 0) {
+        btnPrev.classList.remove('hidden');
+      } else {
+        btnPrev.classList.add('hidden');
+      }
+
+      // அடுத்த பட்டன்
+      const btnNext = document.getElementById('btnNext');
+      if (currentIndex === activeQuestions.length - 1) {
+        btnNext.innerHTML = `முடிவுகளைக் காண்க <i class="fa-solid fa-trophy"></i>`;
+      } else {
+        btnNext.innerHTML = `அடுத்த வினா <i class="fa-solid fa-arrow-right"></i>`;
+      }
 
       const container = document.getElementById('optionsContainer');
       container.innerHTML = '';
+
+      const isAnswered = userAnswers[currentIndex] !== undefined;
+      const selectedIdx = userAnswers[currentIndex];
+
       q.options.forEach((opt, idx) => {
         const btn = document.createElement('button');
-        btn.className = "w-full text-left p-3.5 rounded-xl border border-slate-800 bg-slate-950 hover:bg-slate-900 transition text-xs sm:text-sm text-slate-200 flex items-center justify-between";
+        btn.className = "w-full text-left p-3.5 rounded-xl border border-slate-800 bg-slate-950 transition text-xs sm:text-sm text-slate-200 flex items-center justify-between";
         btn.textContent = opt;
-        btn.onclick = () => selectOption(idx);
+
+        if (isAnswered) {
+          if (idx === q.answer) {
+            btn.classList.add('border-emerald-500', 'bg-emerald-950/50', 'text-emerald-300', 'font-bold');
+          } else if (idx === selectedIdx) {
+            btn.classList.add('border-rose-500', 'bg-rose-950/50', 'text-rose-300');
+          }
+        } else {
+          btn.classList.add('hover:bg-slate-900');
+          btn.onclick = () => selectOption(idx);
+        }
+
         container.appendChild(btn);
       });
+
+      const expCard = document.getElementById('explanationCard');
+      if (isAnswered) {
+        if (q.explanation) {
+          document.getElementById('expText').textContent = q.explanation;
+          expCard.classList.remove('hidden');
+        } else {
+          expCard.classList.add('hidden');
+        }
+        btnNext.classList.remove('hidden');
+      } else {
+        expCard.classList.add('hidden');
+        btnNext.classList.add('hidden');
+      }
     }
 
     function selectOption(idx) {
-      if (selectedAnswer !== null) return;
-      selectedAnswer = idx;
+      if (userAnswers[currentIndex] !== undefined) return;
+      userAnswers[currentIndex] = idx;
+
       const q = activeQuestions[currentIndex];
       const buttons = document.getElementById('optionsContainer').children;
 
       if (idx === q.answer) {
         buttons[idx].classList.add('border-emerald-500', 'bg-emerald-950/50', 'text-emerald-300', 'font-bold');
-        score++;
       } else {
         buttons[idx].classList.add('border-rose-500', 'bg-rose-950/50', 'text-rose-300');
         buttons[q.answer].classList.add('border-emerald-500', 'bg-emerald-950/50', 'text-emerald-300', 'font-bold');
+      }
+
+      for (let btn of buttons) {
+        btn.onclick = null;
+        btn.classList.remove('hover:bg-slate-900');
       }
 
       if (q.explanation) {
@@ -299,19 +352,33 @@
     }
 
     function nextQuestion() {
-      currentIndex++;
-      if (currentIndex < activeQuestions.length) {
+      if (currentIndex < activeQuestions.length - 1) {
+        currentIndex++;
         loadQuestion();
       } else {
         showResults();
       }
     }
 
+    function prevQuestion() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        loadQuestion();
+      }
+    }
+
     function showResults() {
+      let finalScore = 0;
+      activeQuestions.forEach((q, idx) => {
+        if (userAnswers[idx] === q.answer) {
+          finalScore++;
+        }
+      });
+
       document.getElementById('screenQuiz').classList.add('hidden');
       document.getElementById('screenResult').classList.remove('hidden');
       document.getElementById('resultSubject').textContent = currentCategory;
-      document.getElementById('scoreText').textContent = `${score} / ${activeQuestions.length}`;
+      document.getElementById('scoreText').textContent = `${finalScore} / ${activeQuestions.length}`;
     }
 
     // Admin Functions
@@ -350,7 +417,6 @@
       }
     }
 
-    // Gemini Bulk Code Import Function
     function importBulkQuestions() {
       const rawText = document.getElementById('bulkJsonInput').value.trim();
       if (!rawText) {
@@ -365,7 +431,6 @@
           return;
         }
 
-        // Add to questions array
         questions.push(...parsed);
         localStorage.setItem('love_tnpsc_v5', JSON.stringify(questions));
 
