@@ -59,7 +59,7 @@
 
       <div class="text-center space-y-1 py-1">
         <h2 class="text-base font-bold text-slate-100">தேர்வுப் பட்டியல் (Online Tests)</h2>
-        <p class="text-xs text-slate-400">பயிற்சி செய்ய விரும்பும் தேர்வினைத் தொடங்குங்கள்</p>
+        <p class="text-xs text-slate-400">நீங்கள் பயிற்சி செய்ய விரும்பும் தேர்வினைத் தொடங்குங்கள்</p>
       </div>
 
       <div class="space-y-2.5" id="testList"></div>
@@ -132,9 +132,9 @@
         <p class="text-xs text-emerald-400 font-semibold" id="adCountdownText">தயவுசெய்து 10 விநாடிகள் காத்திருக்கவும்</p>
       </div>
 
-      <!-- Small Banner Inside Modal (Adsterra) -->
-      <div class="w-full max-w-[320px] h-[60px] mx-auto bg-slate-950 border border-slate-800/80 rounded-xl flex items-center justify-center overflow-hidden">
-        <iframe src="about:blank" id="modalAdFrame" class="w-[320px] h-[50px] border-0 overflow-hidden"></iframe>
+      <!-- Small Banner Inside Modal (Adsterra 320x50 Ad Unit) -->
+      <div class="w-full max-w-[320px] h-[55px] mx-auto bg-slate-950 border border-slate-800/80 rounded-xl flex items-center justify-center overflow-hidden">
+        <div id="modalAdContainer" class="w-[320px] h-[50px] flex items-center justify-center"></div>
       </div>
 
       <!-- Close / Start Quiz Button -->
@@ -191,7 +191,7 @@
         <!-- 1. Bulk Import Tab -->
         <div id="bulkImportTab" class="space-y-3">
           <p class="text-[11px] text-slate-400">Gemini கொடுக்கும் JSON Code-ஐ கீழே ஒட்டவும்:</p>
-          <textarea id="bulkJsonInput" placeholder='[&#10;  {&#10;    "category": "இந்திய ஆட்சியியல்",&#10;    "topic": "மாநில அரசு & உள்ளாட்சி அமைப்புகள் (பஞ்சாயத்து)",&#10;    "testName": "தேர்வு 1",&#10;    "question": "வினா...",&#10;    "options": ["A", "B", "C", "D"],&#10;    "answer": 0,&#10;    "explanation": "விளக்கம்..."&#10;  }&#10;]' class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs h-44 text-emerald-300 font-mono outline-none focus:border-emerald-500"></textarea>
+          <textarea id="bulkJsonInput" placeholder='[&#10;  {&#10;    "category": "இந்திய ஆட்சியியல்",&#10;    "topic": "அரசியலமைப்பு உருவாக்கம் & முகப்புரை",&#10;    "testName": "தேர்வு 1",&#10;    "question": "வினா...",&#10;    "options": ["A", "B", "C", "D"],&#10;    "answer": 0,&#10;    "explanation": "விளக்கம்..."&#10;  }&#10;]' class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs h-44 text-emerald-300 font-mono outline-none focus:border-emerald-500"></textarea>
           <button onclick="importBulkQuestions()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs shadow-lg transition">வினாக்களை ஏற்று (Import Questions)</button>
         </div>
 
@@ -460,28 +460,24 @@
       });
     }
 
-    // 10 விநாடி பாப்-அப் விளம்பரத் திரை (No External Redirects)
+    // 10 விநாடி பாப்-அப் விளம்பரத் திரை (Adsterra Direct Iframe Embed)
     function triggerAdBeforeQuiz(testName) {
       pendingTest = testName;
       const modal = document.getElementById('adModal');
       const countdownText = document.getElementById('adCountdownText');
       const btnSkip = document.getElementById('btnSkipAd');
+      const adContainer = document.getElementById('modalAdContainer');
 
-      // Modal-க்குள் விளம்பரத்தை லோட் செய்தல்
-      const frame = document.getElementById('modalAdFrame');
-      frame.srcdoc = `
-        <body style="margin:0;padding:0;display:flex;justify-content:center;align-items:center;background:transparent;">
-          <script type="text/javascript">
-            atOptions = {
-              'key' : '853486a16277f98252f9b41931818810',
-              'format' : 'iframe',
-              'height' : 50,
-              'width' : 320,
-              'params' : {}
-            };
-          <\/script>
-          <script type="text/javascript" src="https://www.highrevenueformat.com/853486a16277f98252f9b41931818810/invoke.js"><\/script>
-        </body>
+      // விளம்பரத்தை நேரடியாக Iframe மூலம் லோட் செய்தல்
+      adContainer.innerHTML = `
+        <iframe 
+          src="https://www.highrevenueformat.com/853486a16277f98252f9b41931818810/invoke.js" 
+          width="320" 
+          height="50" 
+          frameborder="0" 
+          scrolling="no" 
+          class="border-0 overflow-hidden">
+        </iframe>
       `;
 
       modal.classList.remove('hidden');
