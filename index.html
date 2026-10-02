@@ -29,7 +29,7 @@
       </div>
 
       <div class="grid grid-cols-2 gap-3" id="categoryGrid">
-        <!-- பாடக் கார்டுகள் தானாகக் காட்டப்படும் -->
+        <!-- Cards injected dynamically -->
       </div>
     </section>
 
@@ -88,7 +88,7 @@
 
   <!-- Admin Modal -->
   <div id="adminModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl p-5 space-y-4 max-h-[90vh] overflow-y-auto shadow-2xl">
+    <div class="bg-slate-900 border border-slate-800 w-full max-w-lg rounded-2xl p-5 space-y-4 max-h-[90vh] overflow-y-auto shadow-2xl">
       <div class="flex justify-between items-center border-b border-slate-800 pb-3">
         <h3 class="font-bold text-slate-100 text-sm">நிர்வாகி பகுதி (Admin Login)</h3>
         <button onclick="closeAdmin()" class="text-slate-400 hover:text-white font-bold text-lg">✕</button>
@@ -104,64 +104,65 @@
         </div>
       </div>
 
-      <!-- Add Question Form -->
-      <div id="adminPanelSection" class="hidden space-y-3">
-        <div class="border-b border-slate-800 pb-2">
-          <p class="text-xs font-bold text-emerald-400">புதிய வினா சேர்க்கும் படிவம்</p>
-          <p class="text-[11px] text-slate-400">சரியான பாடப்பிரிவைத் தேர்ந்தெடுத்து வினாவைச் சேர்க்கவும்</p>
-        </div>
-
-        <div>
-          <label class="text-[11px] text-slate-300 font-semibold block mb-1">பாடப்பிரிவு (Category):</label>
-          <select id="newCategory" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-emerald-400 font-bold outline-none focus:border-emerald-500">
-            <option value="பொதுத்தமிழ்">பொதுத்தமிழ்</option>
-            <option value="இந்திய ஆட்சியியல்">இந்திய ஆட்சியியல் (Polity)</option>
-            <option value="இந்திய வரலாறு">இந்திய வரலாறு (History)</option>
-            <option value="இந்தியப் பொருளாதாரம்">இந்தியப் பொருளாதாரம் (Economy)</option>
-            <option value="தமிழ்நாடு நிர்வாகம்">தமிழ்நாடு நிர்வாகம் (TN Admin - Unit 9)</option>
-            <option value="தமிழ்நாடு மரபு & பண்பாடு">தமிழ்நாடு மரபு & பண்பாடு (Unit 8)</option>
-            <option value="புவியியல்">புவியியல் (Geography)</option>
-            <option value="பொது அறிவியல்">பொது அறிவியல் (Science)</option>
-            <option value="கணிதம் & திறனறிவு">கணிதம் & திறனறிவு (Aptitude)</option>
-            <option value="நடப்பு நிகழ்வுகள்">நடப்பு நிகழ்வுகள் (Current Affairs)</option>
-          </select>
-        </div>
-
-        <div>
-          <label class="text-[11px] text-slate-300 block mb-1">வினா (Question):</label>
-          <textarea id="newQuestion" placeholder="வினாவை இங்கே தட்டச்சு செய்யவும்..." class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs h-16 text-slate-100 outline-none focus:border-emerald-500"></textarea>
-        </div>
-
-        <div class="space-y-1.5">
-          <label class="text-[11px] text-slate-300 block">விடைகள் (Options):</label>
-          <input id="opt0" placeholder="விருப்பம் 1 (Option A)" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-100 outline-none focus:border-emerald-500">
-          <input id="opt1" placeholder="விருப்பம் 2 (Option B)" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-100 outline-none focus:border-emerald-500">
-          <input id="opt2" placeholder="விருப்பம் 3 (Option C)" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-100 outline-none focus:border-emerald-500">
-          <input id="opt3" placeholder="விருப்பம் 4 (Option D)" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-100 outline-none focus:border-emerald-500">
-        </div>
+      <!-- Admin Actions Section -->
+      <div id="adminPanelSection" class="hidden space-y-4">
         
-        <div>
-          <label class="text-[11px] text-emerald-400 font-bold block mb-1">சரியான விடை எது?:</label>
-          <select id="correctOpt" class="w-full bg-slate-950 border border-emerald-500/50 rounded-lg p-2 text-xs text-slate-100 outline-none">
-            <option value="0">விருப்பம் 1 (Option A) சரி</option>
-            <option value="1">விருப்பம் 2 (Option B) சரி</option>
-            <option value="2">விருப்பம் 3 (Option C) சரி</option>
-            <option value="3">விருப்பம் 4 (Option D) சரி</option>
-          </select>
-        </div>
-        
-        <div>
-          <label class="text-[11px] text-slate-300 block mb-1">விளக்கம் (Explanation):</label>
-          <textarea id="newExplanation" placeholder="சரியான விடைக்கான விளக்கம் (விருப்பப்பட்டால்)..." class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs h-12 text-slate-100 outline-none focus:border-emerald-500"></textarea>
+        <!-- Toggle Tabs -->
+        <div class="flex gap-2 border-b border-slate-800 pb-2">
+          <button id="tabBulkBtn" onclick="switchAdminTab('bulk')" class="flex-1 py-1.5 text-xs font-bold rounded-lg bg-emerald-500 text-slate-950">Gemini Bulk Import (ஒரே கிளிக்கில் 50+ வினாக்கள்)</button>
+          <button id="tabSingleBtn" onclick="switchAdminTab('single')" class="flex-1 py-1.5 text-xs font-bold rounded-lg bg-slate-800 text-slate-300">தனி வினா சேர்க்க</button>
         </div>
 
-        <button onclick="saveQuestion()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-2.5 rounded-lg text-xs transition">சேமி (Save Question)</button>
+        <!-- 1. Bulk Import Tab (Primary) -->
+        <div id="bulkImportTab" class="space-y-3">
+          <p class="text-[11px] text-slate-400">Gemini கொடுக்கும் மொத்த வினாக்களின் குறியீட்டை (JSON Code) அப்படியே கீழே உள்ள பெட்டியில் Paste செய்யவும்:</p>
+          <textarea id="bulkJsonInput" placeholder='[&#10;  {&#10;    "category": "பொதுத்தமிழ்",&#10;    "question": "வினா...",&#10;    "options": ["A", "B", "C", "D"],&#10;    "answer": 0,&#10;    "explanation": "விளக்கம்..."&#10;  }&#10;]' class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs h-44 text-emerald-300 font-mono outline-none focus:border-emerald-500"></textarea>
+          <button onclick="importBulkQuestions()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs shadow-lg transition">வினாக்களை ஒரே கிளிக்கில் ஏற்று (Import Questions)</button>
+        </div>
+
+        <!-- 2. Single Question Tab -->
+        <div id="singleQuestionTab" class="hidden space-y-3">
+          <div>
+            <label class="text-[11px] text-slate-300 font-semibold block mb-1">பாடப்பிரிவு (Category):</label>
+            <select id="newCategory" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-emerald-400 font-bold outline-none">
+              <option value="பொதுத்தமிழ்">பொதுத்தமிழ்</option>
+              <option value="இந்திய ஆட்சியியல்">இந்திய ஆட்சியியல் (Polity)</option>
+              <option value="இந்திய வரலாறு">இந்திய வரலாறு (History)</option>
+              <option value="இந்தியப் பொருளாதாரம்">இந்தியப் பொருளாதாரம் (Economy)</option>
+              <option value="தமிழ்நாடு நிர்வாகம்">தமிழ்நாடு நிர்வாகம் (TN Admin - Unit 9)</option>
+              <option value="தமிழ்நாடு மரபு & பண்பாடு">தமிழ்நாடு மரபு & பண்பாடு (Unit 8)</option>
+              <option value="புவியியல்">புவியியல் (Geography)</option>
+              <option value="பொது அறிவியல்">பொது அறிவியல் (Science)</option>
+              <option value="கணிதம் & திறனறிவு">கணிதம் & திறனறிவு (Aptitude)</option>
+              <option value="நடப்பு நிகழ்வுகள்">நடப்பு நிகழ்வுகள் (Current Affairs)</option>
+            </select>
+          </div>
+
+          <textarea id="newQuestion" placeholder="வினா" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs h-14 text-slate-100 outline-none"></textarea>
+          
+          <div class="space-y-1.5">
+            <input id="opt0" placeholder="விருப்பம் 1" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-1.5 text-xs text-slate-100">
+            <input id="opt1" placeholder="விருப்பம் 2" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-1.5 text-xs text-slate-100">
+            <input id="opt2" placeholder="விருப்பம் 3" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-1.5 text-xs text-slate-100">
+            <input id="opt3" placeholder="விருப்பம் 4" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-1.5 text-xs text-slate-100">
+          </div>
+
+          <select id="correctOpt" class="w-full bg-slate-950 border border-emerald-500/50 rounded-lg p-2 text-xs text-slate-100">
+            <option value="0">விருப்பம் 1 சரி</option>
+            <option value="1">விருப்பம் 2 சரி</option>
+            <option value="2">விருப்பம் 3 சரி</option>
+            <option value="3">விருப்பம் 4 சரி</option>
+          </select>
+
+          <textarea id="newExplanation" placeholder="விளக்கம்" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs h-10 text-slate-100 outline-none"></textarea>
+          <button onclick="saveQuestion()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-2 rounded-lg text-xs">சேமி</button>
+        </div>
+
       </div>
     </div>
   </div>
 
   <script>
-    // அனைத்து TNPSC பாடப்பிரிவுகளின் பட்டியல்
     const categoriesData = [
       { id: "பொதுத்தமிழ்", title: "பொதுத்தமிழ்", icon: "fa-book-open", color: "from-rose-500/20 to-orange-500/20", border: "border-rose-500/40" },
       { id: "இந்திய ஆட்சியியல்", title: "ஆட்சியியல் (Polity)", icon: "fa-landmark", color: "from-blue-500/20 to-cyan-500/20", border: "border-blue-500/40" },
@@ -175,9 +176,7 @@
       { id: "நடப்பு நிகழ்வுகள்", title: "நடப்பு நிகழ்வுகள்", icon: "fa-newspaper", color: "from-teal-500/20 to-emerald-500/20", border: "border-teal-500/40" }
     ];
 
-    // மாதிரி வினாக்கள்
     const sampleQuestions = [
-      // 1. பொதுத்தமிழ்
       {
         category: "பொதுத்தமிழ்",
         question: "தேம்பாவணி நூலின் ஆசிரியர் யார்?",
@@ -185,84 +184,19 @@
         answer: 0,
         explanation: "தேம்பாவணி வீரமாமுனிவரால் இயற்றப்பட்டது."
       },
-      // 2. இந்திய ஆட்சியியல்
       {
         category: "இந்திய ஆட்சியியல்",
         question: "இந்திய அரசியலமைப்பின் 75(4) உறுப்பு எதனைப் பற்றிக் குறிப்பிடுகிறது?",
         options: ["பிரதமரின் நியமனம்", "அமைச்சர்களின் பதவிப் பிரமாணம்", "மக்களவை கலைப்பு", "குடியரசுத் தலைவர் தேர்தல்"],
         answer: 1,
         explanation: "உறுப்பு 75(4)ன் படி குடியரசுத் தலைவர் அமைச்சர்களுக்கு பதவிப் பிரமாணமும் இரகசியக் காப்புப் பிரமாணமும் செய்து வைக்கிறார்."
-      },
-      // 3. தமிழ்நாடு நிர்வாகம் (Unit 9)
-      {
-        category: "தமிழ்நாடு நிர்வாகம்",
-        question: "தமிழ்நாட்டில் 'லோக் ஆயுக்தா' சட்டம் எந்த ஆண்டு சட்டப் பேரவையில் நிறைவேற்றப்பட்டது?",
-        options: ["2016", "2018", "2019", "2021"],
-        answer: 1,
-        explanation: "தமிழ்நாடு லோக் ஆயுக்தா சட்டம் ஜூலை 9, 2018 அன்று சட்டமன்றத்தில் நிறைவேற்றப்பட்டது."
-      },
-      // 4. தமிழ்நாடு மரபு & பண்பாடு (Unit 8)
-      {
-        category: "தமிழ்நாடு மரபு & பண்பாடு",
-        question: "கீழடி அகழாய்வு தளம் தமிழ்நாட்டின் எந்த மாவட்டத்தில் அமைந்துள்ளது?",
-        options: ["மதுரை", "சிவகங்கை", "ராமநாதபுரம்", "புதுக்கோட்டை"],
-        answer: 1,
-        explanation: "கீழடி வைகை நதிக்கரையில் சிவகங்கை மாவட்டத்தில் உள்ள திருப்புவனம் வட்டத்தில் அமைந்துள்ளது."
-      },
-      // 5. இந்திய வரலாறு
-      {
-        category: "இந்திய வரலாறு",
-        question: "மொகஞ்சதாரோ எந்த நதிக்கரையில் அமைந்துள்ளது?",
-        options: ["ராவி", "சிந்து", "சரஸ்வதி", "சட்லஜ்"],
-        answer: 1,
-        explanation: "மொகஞ்சதாரோ சிந்து நதிக்கரையில் பாகிஸ்தானின் லர்கானா மாவட்டத்தில் அமைந்துள்ளது."
-      },
-      // 6. இந்தியப் பொருளாதாரம்
-      {
-        category: "இந்தியப் பொருளாதாரம்",
-        question: "நிதி ஆயோக் (NITI Aayog) எப்போது தொடங்கப்பட்டது?",
-        options: ["ஜனவரி 1, 2014", "ஜனவரி 1, 2015", "ஆகஸ்ட் 15, 2014", "ஏப்ரல் 1, 2015"],
-        answer: 1,
-        explanation: "திட்டக் குழுவிற்கு மாற்றாக ஜனவரி 1, 2015 அன்று நிதி ஆயோக் நடைமுறைக்கு வந்தது."
-      },
-      // 7. புவியியல்
-      {
-        category: "புவியியல்",
-        question: "தென்னிந்தியாவின் மிக உயரமான சிகரம் எது?",
-        options: ["தொட்டபெட்டா", "ஆனைமுடி", "மகேந்திரகிரி", "அகஸ்தியர் மலை"],
-        answer: 1,
-        explanation: "ஆனைமுடி (2695 மீ) தென்னிந்தியாவின் மிக உயரமான சிகரமாகும்."
-      },
-      // 8. பொது அறிவியல்
-      {
-        category: "பொது அறிவியல்",
-        question: "மனித இரத்தத்தின் சராசரி pH மதிப்பு என்ன?",
-        options: ["6.4", "7.4", "8.4", "5.4"],
-        answer: 1,
-        explanation: "மனித இரத்தத்தின் சராசரி pH மதிப்பு காரத்தன்மை கொண்ட சுமார் 7.4 ஆகும்."
-      },
-      // 9. கணிதம்
-      {
-        category: "கணிதம் & திறனறிவு",
-        question: "2, 4, 8, 16, 32, ... அடுத்த எண் என்ன?",
-        options: ["48", "60", "64", "72"],
-        answer: 2,
-        explanation: "ஒவ்வொரு எண்ணும் 2 ஆல் பெருக்கப்படுகிறது. 32 × 2 = 64."
-      },
-      // 10. நடப்பு நிகழ்வுகள்
-      {
-        category: "நடப்பு நிகழ்வுகள்",
-        question: "புதிய கல்விக் கொள்கை (NEP) எந்த ஆண்டு மத்திய அரசால் அங்கீகரிக்கப்பட்டது?",
-        options: ["2018", "2019", "2020", "2022"],
-        answer: 2,
-        explanation: "புதிய கல்விக் கொள்கை 2020 ஜூலை 29 அன்று மத்திய அமைச்சரவையால் ஏற்கப்பட்டது."
       }
     ];
 
-    let savedData = localStorage.getItem('love_tnpsc_v4');
+    let savedData = localStorage.getItem('love_tnpsc_v5');
     let questions = savedData ? JSON.parse(savedData) : sampleQuestions;
     if (!savedData) {
-      localStorage.setItem('love_tnpsc_v4', JSON.stringify(questions));
+      localStorage.setItem('love_tnpsc_v5', JSON.stringify(questions));
     }
 
     let currentCategory = "";
@@ -296,7 +230,7 @@
       activeQuestions = questions.filter(q => q.category === catId);
 
       if (activeQuestions.length === 0) {
-        alert("இந்தப் பாடப்பிரிவில் இதுவரை வினாக்கள் சேர்க்கப்படவில்லை! அட்மின் பகுதியில் சென்று சேர்க்கவும்.");
+        alert("இந்தப் பாடப்பிரிவில் வினாக்கள் இல்லை! Admin பகுதியில் Gemini Code-ஐ Import செய்யவும்.");
         return;
       }
 
@@ -380,6 +314,7 @@
       document.getElementById('scoreText').textContent = `${score} / ${activeQuestions.length}`;
     }
 
+    // Admin Functions
     function openAdmin() {
       document.getElementById('adminModal').classList.remove('hidden');
       document.getElementById('adminAuthSection').classList.remove('hidden');
@@ -401,6 +336,48 @@
       }
     }
 
+    function switchAdminTab(tab) {
+      if (tab === 'bulk') {
+        document.getElementById('bulkImportTab').classList.remove('hidden');
+        document.getElementById('singleQuestionTab').classList.add('hidden');
+        document.getElementById('tabBulkBtn').className = "flex-1 py-1.5 text-xs font-bold rounded-lg bg-emerald-500 text-slate-950";
+        document.getElementById('tabSingleBtn').className = "flex-1 py-1.5 text-xs font-bold rounded-lg bg-slate-800 text-slate-300";
+      } else {
+        document.getElementById('bulkImportTab').classList.add('hidden');
+        document.getElementById('singleQuestionTab').classList.remove('hidden');
+        document.getElementById('tabSingleBtn').className = "flex-1 py-1.5 text-xs font-bold rounded-lg bg-emerald-500 text-slate-950";
+        document.getElementById('tabBulkBtn').className = "flex-1 py-1.5 text-xs font-bold rounded-lg bg-slate-800 text-slate-300";
+      }
+    }
+
+    // Gemini Bulk Code Import Function
+    function importBulkQuestions() {
+      const rawText = document.getElementById('bulkJsonInput').value.trim();
+      if (!rawText) {
+        alert("குறியீட்டை (Code) உள்ளிடவும்!");
+        return;
+      }
+
+      try {
+        const parsed = JSON.parse(rawText);
+        if (!Array.isArray(parsed)) {
+          alert("தவறான குறியீடு! இது ஒரு Array [...] ஆக இருக்க வேண்டும்.");
+          return;
+        }
+
+        // Add to questions array
+        questions.push(...parsed);
+        localStorage.setItem('love_tnpsc_v5', JSON.stringify(questions));
+
+        alert(`அற்புதம்! ${parsed.length} வினாக்கள் வெற்றிகரமாக சேர்க்கப்பட்டன!`);
+        document.getElementById('bulkJsonInput').value = '';
+        closeAdmin();
+        renderCategories();
+      } catch (e) {
+        alert("குறியீட்டில் பிழை உள்ளது! Gemini கொடுத்த Code-ஐ முழுமையாக நகலெடுத்து ஒட்டவும்.");
+      }
+    }
+
     function saveQuestion() {
       const cat = document.getElementById('newCategory').value;
       const q = document.getElementById('newQuestion').value.trim();
@@ -412,22 +389,20 @@
       const exp = document.getElementById('newExplanation').value.trim();
 
       if (!q || !o0 || !o1 || !o2 || !o3) {
-        alert("வினா மற்றும் 4 விருப்பங்களையும் பூர்த்தி செய்யவும்!");
+        alert("அனைத்து விவரங்களையும் பூர்த்தி செய்யவும்!");
         return;
       }
 
-      const newEntry = {
+      questions.push({
         category: cat,
         question: q,
         options: [o0, o1, o2, o3],
         answer: ans,
         explanation: exp
-      };
+      });
 
-      questions.push(newEntry);
-      localStorage.setItem('love_tnpsc_v4', JSON.stringify(questions));
-
-      alert(`${cat} பாடப்பிரிவில் வினா வெற்றிகரமாகச் சேர்க்கப்பட்டது!`);
+      localStorage.setItem('love_tnpsc_v5', JSON.stringify(questions));
+      alert(`${cat} பாடப்பிரிவில் வினா சேர்க்கப்பட்டது!`);
 
       document.getElementById('newQuestion').value = '';
       document.getElementById('opt0').value = '';
