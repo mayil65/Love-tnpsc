@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>LOVE TNPSC</title>
+  
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#0f172a">
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              500: '#22c55e',
+              800: '#166534',
+              900: '#0f172a'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * { -webkit-tap-highlight-color: transparent; }
+    .option-btn { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+    .option-btn:active { transform: scale(0.98); }
+    @keyframes pulseSoft { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+    .timer-alert { animation: pulseSoft 0.8s infinite; color: #ef4444 !important; }
+  </style>
+</head>
+<body class="bg-slate-900 min-h-screen flex justify-center items-center p-0 sm:p-4 text-slate-100 font-sans">
+
+  <!-- Mobile App Frame -->
+  <div class="w-full max-w-md bg-slate-950 min-h-screen sm:min-h-[800px] sm:rounded-3xl shadow-2xl flex flex-col justify-between overflow-hidden border border-slate-800 relative">
+    
+    <!-- Top Bar -->
+    <header class="bg-slate-900/90 backdrop-blur border-b border-slate-800 p-4 sticky top-0 z-20 flex items-center justify-between">
+      <div class="flex items-center space-x-2">
+        <span class="text-xl">❤️</span>
+        <div>
+          <h1 class="text-base font-black tracking-wide text-white">LOVE TNPSC</h1>
+          <p class="text-[10px] text-emerald-400">குரூப் 1, 2, 4 மாதிரித் தேர்வுகள்</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="openAdminModal()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1.5 rounded-lg border border-slate-700">
+          ⚙️ Admin
+        </button>
+      </div>
+    </header>
+
+    <!-- 1. Home Screen -->
+    <section id="screenHome" class="p-5 flex-1 flex flex-col justify-between">
+      <div>
+        <div class="bg-gradient-to-br from-indigo-900 to-slate-900 border border-indigo-700/40 rounded-2xl p-5 mb-5 shadow-lg">
+          <span class="bg-emerald-500/20 text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded uppercase">தினசரி வினாடி-வினா</span>
+          <h2 class="text-xl font-extrabold text-white mt-2 leading-tight">வெற்றியை நோக்கி முதல் அடி!</h2>
+          <p class="text-xs text-slate-300 mt-1">பாடவாரியான மாதிரி வினாக்களை எழுதி உங்கள் அறிவைச் சோதியுங்கள்.</p>
+        </div>
+
+        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 px-1">பிரிவைத் தேர்ந்தெடுக்கவும்:</h3>
+
+        <div class="space-y-3">
+          <button onclick="startQuiz('all')" class="w-full flex items-center justify-between p-4 bg-slate-900 border border-slate-800 hover:border-emerald-500 rounded-2xl text-left transition group">
+            <div class="flex items-center space-x-3">
+              <span class="text-2xl p-2 bg-indigo-500/10 rounded-xl">🎯</span>
+              <div>
+                <p class="text-sm font-bold text-white group-hover:text-emerald-400">முழு மாதிரித் தேர்வு (All Subjects)</p>
+                <p class="text-[11px] text-slate-400">தமிழ், வரலாறு, அரசியல் மற்றும் பொது அறிவியல்</p>
+              </div>
+            </div>
+            <span class="text-slate-500 group-hover:text-emerald-400 font-bold">➔</span>
+          </button>
+
+          <button onclick="startQuiz('tamil')" class="w-full flex items-center justify-between p-4 bg-slate-900 border border-slate-800 hover:border-emerald-500 rounded-2xl text-left transition group">
+            <div class="flex items-center space-x-3">
+              <span class="text-2xl p-2 bg-emerald-500/10 rounded-xl">📖</span>
+              <div>
+                <p class="text-sm font-bold text-white group-hover:text-emerald-400">பொதுத்தமிழ் வினாக்கள்</p>
+                <p class="text-[11px] text-slate-400">இலக்கணம், இலக்கியம், கீழடி மற்றும் அறிஞர்கள்</p>
+              </div>
+            </div>
+            <span class="text-slate-500 group-hover:text-emerald-400 font-bold">➔</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="text-center py-4">
+        <p class="text-xs text-slate-500">Android & iPhone இரண்டிலும் எளிதாகப் படிக்கலாம்</p>
+      </div>
+    </section>
+
+    <!-- 2. Quiz Playing Screen -->
+    <section id="screenQuiz" class="p-4 flex-1 flex-col justify-between hidden">
+      <div>
+        <!-- Stats -->
+        <div class="flex items-center justify-between text-xs font-medium text-slate-400 mb-2">
+          <span id="qCountText">வினா 1/5</span>
+          <div id="timerBadge" class="bg-slate-900 border border-slate-800 px-3 py-1 rounded-full font-mono text-emerald-400 font-bold">
+            ⏱️ <span id="timeLeft">20</span>s
+          </div>
+        </div>
+
+        <!-- Progress -->
+        <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden mb-4">
+          <div id="progressBar" class="bg-emerald-500 h-full w-0 transition-all duration-300"></div>
+        </div>
+
+        <!-- Question Card -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 mb-4">
+          <span id="qSubjectTag" class="text-[10px] bg-emerald-500/10 text-emerald-400 font-bold px-2 py-0.5 rounded uppercase">பொதுத்தமிழ்</span>
+          <h2 id="qText" class="text-base font-bold text-white mt-2 leading-relaxed">
+            கேள்வி ஏற்றப்படுகிறது...
+          </h2>
+        </div>
+
+        <!-- Options Container -->
+        <div id="optionsContainer" class="flex flex-col gap-2.5 mb-4"></div>
+
+        <!-- Explanation Card -->
+        <div id="explBox" class="hidden bg-slate-900/80 border border-slate-800 rounded-xl p-3 text-xs text-slate-300 mb-3">
+          <span class="font-bold text-emerald-400 flex items-center gap-1 mb-1">💡 விளக்கம்:</span>
+          <p id="explText"></p>
+        </div>
+      </div>
+
+      <button id="nextBtn" onclick="nextQuestion()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg transition flex items-center justify-center gap-2 hidden">
+        <span>அடுத்த கேள்வி</span>
+        <span>➔</span>
+      </button>
+    </section>
+
+    <!-- 3. Result Screen -->
+    <section id="screenResult" class="p-6 flex-1 flex-col justify-center items-center text-center hidden">
+      <div class="w-24 h-24 rounded-full bg-gradient-to-tr from-emerald-600 to-indigo-600 text-white flex flex-col justify-center items-center shadow-xl mb-4">
+        <span id="finalScore" class="text-3xl font-black">0</span>
+        <span class="text-[10px] uppercase font-bold text-emerald-200">மதிப்பெண்</span>
+      </div>
+
+      <h2 id="resultTitle" class="text-xl font-bold text-white mb-1">பயிற்சி முடிந்தது!</h2>
+      <p id="resultDesc" class="text-xs text-slate-400 mb-6">உங்கள் விடைகள் கணக்கிடப்பட்டுள்ளன.</p>
+
+      <div class="w-full grid grid-cols-2 gap-3 mb-6 text-xs">
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-3">
+          <span class="text-slate-400">சரி</span>
+          <p id="resCorrect" class="text-lg font-bold text-emerald-400">0</p>
+        </div>
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-3">
+          <span class="text-slate-400">தவறு</span>
+          <p id="resWrong" class="text-lg font-bold text-rose-400">0</p>
+        </div>
+      </div>
+
+      <div class="w-full space-y-2.5">
+        <button onclick="restartQuiz()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 rounded-xl transition text-sm">
+          மீண்டும் பயிற்சி செய்க 🔄
+        </button>
+        <button onclick="goHome()" class="w-full bg-slate-900 hover:bg-slate-800 text-slate-300 font-semibold py-3 rounded-xl transition text-xs border border-slate-800">
+          முகப்புப் பக்கம் 🏠
+        </button>
+      </div>
+    </section>
+
+    <!-- Ad Space (Google AdSense / AdMob Banner Slot) -->
+    <footer class="bg-slate-950 border-t border-slate-800/80 p-2.5 text-center">
+      <div class="w-full min-h-[50px] bg-slate-900/60 border border-dashed border-slate-800 rounded-lg flex flex-col items-center justify-center p-2 text-slate-500 text-[11px]">
+        <span class="font-bold text-slate-400">📢 விளம்பரம் (Ad Space)</span>
+        <span class="text-[9px]">உங்கள் Google AdMob/AdSense விளம்பரக் குறியீட்டை இங்கே வைக்கலாம்</span>
+      </div>
+    </footer>
+
+    <!-- Admin Panel Modal -->
+    <div id="adminModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div class="bg-slate-900 border border-slate-800 w-full max-w-sm rounded-2xl p-5 text-slate-200">
+        
+        <!-- Login Stage -->
+        <div id="adminLoginStage">
+          <h3 class="text-base font-bold text-white mb-2">Admin உள்நுழைவு</h3>
+          <p class="text-xs text-slate-400 mb-4">புதிய வினாக்களைச் சேர்க்க கடவுச்சொல்லை உள்ளிடவும்.</p>
+          <input type="password" id="adminPass" placeholder="கடவுச்சொல் (Password)" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm mb-3 focus:outline-none focus:border-emerald-500">
+          <p class="text-[10px] text-slate-500 mb-3">(Default Password: <span class="text-emerald-400">1234</span>)</p>
+          <div class="flex gap-2">
+            <button onclick="checkAdminPassword()" class="flex-1 bg-emerald-600 hover:bg-emerald-500 py-2.5 rounded-xl font-bold text-xs text-white">உள்நுழை</button>
+            <button onclick="closeAdminModal()" class="flex-1 bg-slate-800 py-2.5 rounded-xl text-xs text-slate-400">ரத்து</button>
+          </div>
+        </div>
+
+        <!-- Add Question Stage -->
+        <div id="adminAddStage" class="hidden max-h-[70vh] overflow-y-auto pr-1">
+          <div class="flex justify-between items-center mb-3">
+            <h3 class="text-sm font-bold text-white">புதிய வினா சேர்க்க</h3>
+            <button onclick="closeAdminModal()" class="text-slate-400 text-xs">✕ மூடு</button>
+          </div>
+          <div class="space-y-2 text-xs">
+            <input type="text" id="newQ" placeholder="கேள்வி" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-lg">
+            <input type="text" id="newOptA" placeholder="ஆப்ஷன் A" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-lg">
+            <input type="text" id="newOptB" placeholder="ஆப்ஷன் B" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-lg">
+            <input type="text" id="newOptC" placeholder="ஆப்ஷன் C" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-lg">
+            <input type="text" id="newOptD" placeholder="ஆப்ஷன் D" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-lg">
+            <select id="newCorrect" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-lg text-slate-300">
+              <option value="0">சரியான விடை: ஆப்ஷன் A</option>
+              <option value="1">சரியான விடை: ஆப்ஷன் B</option>
+              <option value="2">சரியான விடை: ஆப்ஷன் C</option>
+              <option value="3">சரியான விடை: ஆப்ஷன் D</option>
+            </select>
+            <textarea id="newExpl" placeholder="விளக்கம் (Explanation)" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-lg"></textarea>
+            <button onclick="saveNewQuestion()" class="w-full bg-emerald-600 hover:bg-emerald-500 py-3 rounded-xl font-bold text-white mt-2">வினாவைச் சேமி 💾</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Initial Question Bank
+    const defaultQuestions = [
+      {
+        subject: "பொதுத்தமிழ்",
+        question: "'கற்க கசடறக் கற்பவை கற்றபின் நிற்க அதற்குத் தக' - இக்குறட்பாவில் பயின்று வந்துள்ள அணி எது?",
+        options: ["உவமையணி", "சொற்பொருள் பின்வரு நிலையணி", "வேற்றுமையணி", "தற்குறிப்பேற்ற அணி"],
+        answer: 1,
+        explanation: "சொல் திரும்ப வராமல் பொருள் மட்டும் அல்லது இரண்டும் பின்வருவது தொடர்பான விளக்கம்."
+      },
+      {
+        subject: "தமிழ்நாடு வரலாறு",
+        question: "கீழடி தொல்லியல் அகழாய்வு தளம் தமிழ்நாட்டின் எந்த மாவட்டத்தில் அமைந்துள்ளது?",
+        options: ["மதுரை", "சிவகங்கை", "ராமநாதபுரம்", "புதுக்கோட்டை"],
+        answer: 1,
+        explanation: "கீழடி சிவகங்கை மாவட்டம், திருப்புவனம் வட்டம், வைகை ஆற்றின் தென் கரையில் உள்ளது."
+      },
+      {
+        subject: "இந்திய ஆட்சியியல்",
+        question: "இந்திய அரசியலமைப்பின் 'இதயம் மற்றும் ஆன்மா' என அம்பேத்கர் குறிப்பிட்ட சரத்து எது?",
+        options: ["சரத்து 14", "சரத்து 19", "சரத்து 32", "சரத்து 21"],
+        answer: 2,
+        explanation: "சரத்து 32 அரசியலமைப்புக்குட்பட்டு தீர்வு காணும் உரிமையை உறுதி செய்கிறது."
+      }
+    ];
+
+    // Load from LocalStorage if available
+    let allQuestions = JSON.parse(localStorage.getItem('love_tnpsc_questions')) || defaultQuestions;
+
+    let currentList = [];
+    let qIndex = 0;
+    let score = 0;
+    let wrong = 0;
+    let locked = false;
+    let timer = null;
+    let seconds = 20;
+
+    function startQuiz(type) {
+      currentList = [...allQuestions].sort(() => Math.random() - 0.5);
+      qIndex = 0;
+      score = 0;
+      wrong = 0;
+
+      document.getElementById('screenHome').classList.add('hidden');
+      document.getElementById('screenResult').classList.add('hidden');
+      document.getElementById('screenQuiz').classList.remove('hidden');
+      document.getElementById('screenQuiz').classList.add('flex');
+
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      locked = false;
+      clearInterval(timer);
+      seconds = 20;
+      updateTimer();
+
+      const q = currentList[qIndex];
+      document.getElementById('qCountText').innerText = `வினா ${qIndex + 1}/${currentList.length}`;
+      document.getElementById('qSubjectTag').innerText = q.subject || "TNPSC";
+      document.getElementById('qText').innerText = q.question;
+      
+      const pct = (qIndex / currentList.length) * 100;
+      document.getElementById('progressBar').style.width = `${pct}%`;
+
+      document.getElementById('explBox').classList.add('hidden');
+      document.getElementById('nextBtn').classList.add('hidden');
+
+      const container = document.getElementById('optionsContainer');
+      container.innerHTML = "";
+
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = "option-btn w-full p-3.5 bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-xl text-left text-sm text-slate-200 flex justify-between items-center";
+        btn.innerHTML = `
+          <div class="flex items-center gap-3">
+            <span class="w-6 h-6 rounded-lg bg-slate-800 flex items-center justify-center text-xs font-bold text-slate-400">${String.fromCharCode(65 + idx)}</span>
+            <span>${opt}</span>
+          </div>
+          <span class="status-icon text-base"></span>
+        `;
+        btn.onclick = () => onSelectOption(idx, btn);
+        container.appendChild(btn);
+      });
+
+      timer = setInterval(() => {
+        seconds--;
+        updateTimer();
+        if (seconds <= 0) {
+          clearInterval(timer);
+          onTimeOut();
+        }
+      }, 1000);
+    }
+
+    function updateTimer() {
+      const el = document.getElementById('timeLeft');
+      const badge = document.getElementById('timerBadge');
+      el.innerText = seconds;
+      if (seconds <= 5) {
+        badge.classList.add('timer-alert');
+      } else {
+        badge.classList.remove('timer-alert');
+      }
+    }
+
+    function onSelectOption(idx, btn) {
+      if (locked) return;
+      locked = true;
+      clearInterval(timer);
+
+      const q = currentList[qIndex];
+      const allBtns = document.querySelectorAll('.option-btn');
+
+      if (idx === q.answer) {
+        score++;
+        btn.classList.remove('bg-slate-900', 'border-slate-800');
+        btn.classList.add('bg-emerald-950/80', 'border-emerald-500', 'text-emerald-200');
+        btn.querySelector('.status-icon').innerText = '✅';
+      } else {
+        wrong++;
+        btn.classList.remove('bg-slate-900', 'border-slate-800');
+        btn.classList.add('bg-rose-950/80', 'border-rose-500', 'text-rose-200');
+        btn.querySelector('.status-icon').innerText = '❌';
+
+        // Highlight correct
+        allBtns[q.answer].classList.remove('bg-slate-900', 'border-slate-800');
+        allBtns[q.answer].classList.add('bg-emerald-950/80', 'border-emerald-500', 'text-emerald-200');
+        allBtns[q.answer].querySelector('.status-icon').innerText = '✅';
+      }
+
+      showExplanation(q.explanation);
+      document.getElementById('nextBtn').classList.remove('hidden');
+    }
+
+    function onTimeOut() {
+      if (locked) return;
+      locked = true;
+      wrong++;
+      const q = currentList[qIndex];
+      const allBtns = document.querySelectorAll('.option-btn');
+      allBtns[q.answer].classList.add('bg-emerald-950/80', 'border-emerald-500', 'text-emerald-200');
+      allBtns[q.answer].querySelector('.status-icon').innerText = '✅';
+      showExplanation(q.explanation);
+      document.getElementById('nextBtn').classList.remove('hidden');
+    }
+
+    function showExplanation(txt) {
+      const b = document.getElementById('explBox');
+      document.getElementById('explText').innerText = txt || "சரியான விடையை நினைவில் கொள்க.";
+      b.classList.remove('hidden');
+    }
+
+    function nextQuestion() {
+      qIndex++;
+      if (qIndex < currentList.length) {
+        renderQuestion();
+      } else {
+        renderResults();
+      }
+    }
+
+    function renderResults() {
+      clearInterval(timer);
+      document.getElementById('progressBar').style.width = '100%';
+      document.getElementById('screenQuiz').classList.add('hidden');
+      document.getElementById('screenQuiz').classList.remove('flex');
+      document.getElementById('screenResult').classList.remove('hidden');
+      document.getElementById('screenResult').classList.add('flex');
+
+      document.getElementById('finalScore').innerText = score;
+      document.getElementById('resCorrect').innerText = score;
+      document.getElementById('resWrong').innerText = wrong;
+    }
+
+    function restartQuiz() {
+      startQuiz('all');
+    }
+
+    function goHome() {
+      clearInterval(timer);
+      document.getElementById('screenQuiz').classList.add('hidden');
+      document.getElementById('screenResult').classList.add('hidden');
+      document.getElementById('screenHome').classList.remove('hidden');
+    }
+
+    // Admin Panel Functions
+    function openAdminModal() {
+      document.getElementById('adminModal').classList.remove('hidden');
+      document.getElementById('adminLoginStage').classList.remove('hidden');
+      document.getElementById('adminAddStage').classList.add('hidden');
+      document.getElementById('adminPass').value = '';
+    }
+
+    function closeAdminModal() {
+      document.getElementById('adminModal').classList.add('hidden');
+    }
+
+    function checkAdminPassword() {
+      const p = document.getElementById('adminPass').value;
+      if (p === '1234') { // Default admin password
+        document.getElementById('adminLoginStage').classList.add('hidden');
+        document.getElementById('adminAddStage').classList.remove('hidden');
+      } else {
+        alert('தவறான கடவுச்சொல்!');
+      }
+    }
+
+    function saveNewQuestion() {
+      const q = document.getElementById('newQ').value;
+      const a = document.getElementById('newOptA').value;
+      const b = document.getElementById('newOptB').value;
+      const c = document.getElementById('newOptC').value;
+      const d = document.getElementById('newOptD').value;
+      const ans = parseInt(document.getElementById('newCorrect').value);
+      const exp = document.getElementById('newExpl').value;
+
+      if (!q || !a || !b || !c || !d) {
+        alert('தயவுசெய்து அனைத்து விவரங்களையும் நிரப்பவும்!');
+        return;
+      }
+
+      const item = {
+        subject: "பொது அறிவு",
+        question: q,
+        options: [a, b, c, d],
+        answer: ans,
+        explanation: exp
+      };
+
+      allQuestions.unshift(item);
+      localStorage.setItem('love_tnpsc_questions', JSON.stringify(allQuestions));
+      alert('வினா வெற்றிகரமாகச் சேர்க்கப்பட்டது!');
+      closeAdminModal();
+    }
+  </script>
+</body>
+</html>
