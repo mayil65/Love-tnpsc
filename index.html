@@ -5,66 +5,96 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LOVE TNPSC</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
-  <header class="bg-slate-900 border-b border-slate-800 p-4 sticky top-0 z-40 flex justify-between items-center">
-    <h1 class="text-xl font-black text-emerald-400 tracking-wider">LOVE TNPSC</h1>
-    <button onclick="openAdmin()" class="bg-slate-800 hover:bg-slate-700 text-xs px-3 py-1.5 rounded-lg border border-slate-700 text-slate-300 font-bold">Admin</button>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans select-none">
+
+  <!-- Header -->
+  <header class="bg-slate-900 border-b border-slate-800 p-4 sticky top-0 z-40 flex justify-between items-center shadow-md">
+    <div class="flex items-center gap-2 cursor-pointer" onclick="backToCategories()">
+      <span class="text-xl">🎯</span>
+      <h1 class="text-xl font-black text-emerald-400 tracking-wider">LOVE TNPSC</h1>
+    </div>
+    <button onclick="openAdmin()" class="bg-slate-800 hover:bg-slate-700 text-xs px-3.5 py-1.5 rounded-lg border border-slate-700 text-slate-200 font-bold transition">Admin</button>
   </header>
 
+  <!-- Main Container -->
   <main class="flex-1 max-w-xl w-full mx-auto p-4 flex flex-col justify-center">
-    <!-- 1. Start Screen -->
-    <section id="screenStart" class="text-center space-y-6">
-      <div class="space-y-2">
-        <h2 class="text-2xl font-bold text-slate-100">TNPSC தேர்வுப் பயிற்சி</h2>
-        <p class="text-sm text-slate-400">உங்கள் அறிவைச் சோதித்துப் பாருங்கள்!</p>
+
+    <!-- 1. Category Selection Screen -->
+    <section id="screenCategories" class="space-y-4">
+      <div class="text-center space-y-1 py-1">
+        <h2 class="text-lg font-bold text-slate-100">பாடப்பிரிவைத் தேர்ந்தெடுக்கவும்</h2>
+        <p class="text-xs text-slate-400">பயிற்சி செய்ய விரும்பும் பாடத்தைத் தொடுங்கள்</p>
       </div>
-      <button onclick="startQuiz()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-3.5 rounded-xl transition">தேர்வைத் தொடங்கு</button>
+
+      <div class="grid grid-cols-2 gap-3" id="categoryGrid">
+        <!-- பாடக் கார்டுகள் தானாகக் காட்டப்படும் -->
+      </div>
     </section>
 
     <!-- 2. Quiz Playing Screen -->
     <section id="screenQuiz" class="hidden space-y-4">
-      <div class="flex justify-between items-center text-sm font-semibold text-slate-400">
-        <span id="qCountText">வினா 1/1</span>
-        <span id="qSubjectTag" class="text-xs bg-slate-800 text-emerald-400 px-2 py-1 rounded">பொது அறிவு</span>
+      <div class="flex justify-between items-center text-xs font-semibold text-slate-400">
+        <button onclick="backToCategories()" class="text-emerald-400 hover:text-emerald-300 flex items-center gap-1 font-bold">
+          <i class="fa-solid fa-chevron-left"></i> முகப்பு
+        </button>
+        <span id="qSubjectTag" class="bg-slate-800 text-emerald-400 border border-slate-700 px-2.5 py-1 rounded-full text-[11px] font-bold"></span>
+        <span id="qCountText" class="text-slate-300 font-bold"></span>
       </div>
 
+      <!-- Progress bar -->
       <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
         <div id="progressBar" class="bg-emerald-400 h-full w-0 transition-all duration-300"></div>
       </div>
 
-      <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-4">
-        <h3 id="qText" class="text-lg font-medium leading-relaxed">கேள்வி ஏற்றப்படுகிறது...</h3>
+      <!-- Question Card -->
+      <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-4 shadow-xl">
+        <h3 id="qText" class="text-base font-semibold leading-relaxed text-slate-100"></h3>
         <div id="optionsContainer" class="space-y-2.5"></div>
       </div>
 
-      <div id="explanationCard" class="hidden bg-slate-900/80 border border-slate-800 p-4 rounded-xl text-sm space-y-1">
-        <span class="text-emerald-400 font-semibold">விளக்கம்:</span>
-        <p id="expText" class="text-slate-300"></p>
+      <!-- Explanation Card -->
+      <div id="explanationCard" class="hidden bg-slate-900/90 border border-slate-800 p-4 rounded-xl text-xs space-y-1">
+        <span class="text-emerald-400 font-bold flex items-center gap-1">
+          <i class="fa-solid fa-circle-info"></i> விளக்கம்:
+        </span>
+        <p id="expText" class="text-slate-300 leading-relaxed"></p>
       </div>
 
-      <button id="btnNext" onclick="nextQuestion()" class="hidden w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-3 rounded-xl transition">அடுத்த வினா</button>
+      <button id="btnNext" onclick="nextQuestion()" class="hidden w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-3 rounded-xl transition shadow-lg text-sm">அடுத்த வினா ➔</button>
     </section>
 
     <!-- 3. Result Screen -->
     <section id="screenResult" class="hidden text-center space-y-6">
-      <h2 class="text-2xl font-bold text-slate-100">தேர்வு முடிந்தது!</h2>
-      <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-2">
-        <p class="text-sm text-slate-400">உங்கள் மதிப்பெண்</p>
-        <p id="scoreText" class="text-4xl font-extrabold text-emerald-400">0 / 0</p>
+      <div class="space-y-2">
+        <span class="text-5xl">🏆</span>
+        <h2 class="text-2xl font-bold text-slate-100">தேர்வு முடிந்தது!</h2>
+        <p id="resultSubject" class="text-sm text-emerald-400 font-semibold"></p>
       </div>
-      <button onclick="startQuiz()" class="w-full bg-slate-800 hover:bg-slate-700 font-bold py-3 rounded-xl transition">மீண்டும் முயற்சி செய்</button>
+
+      <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-2">
+        <p class="text-xs text-slate-400">உங்கள் மதிப்பெண்</p>
+        <p id="scoreText" class="text-4xl font-black text-emerald-400"></p>
+      </div>
+
+      <div class="space-y-2.5">
+        <button onclick="restartCategoryQuiz()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-3 rounded-xl transition shadow-lg text-sm">மீண்டும் முயற்சி செய்</button>
+        <button onclick="backToCategories()" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-3 rounded-xl transition text-sm">மற்ற பாடங்கள்</button>
+      </div>
     </section>
+
   </main>
 
   <!-- Admin Modal -->
   <div id="adminModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl p-5 space-y-4 max-h-[90vh] overflow-y-auto">
+    <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl p-5 space-y-4 max-h-[90vh] overflow-y-auto shadow-2xl">
       <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-        <h3 class="font-bold text-slate-100">Admin உள்நுழைவு</h3>
-        <button onclick="closeAdmin()" class="text-slate-400 hover:text-white">✕</button>
+        <h3 class="font-bold text-slate-100 text-sm">நிர்வாகி பகுதி (Admin Login)</h3>
+        <button onclick="closeAdmin()" class="text-slate-400 hover:text-white font-bold text-lg">✕</button>
       </div>
 
+      <!-- Password Login -->
       <div id="adminAuthSection" class="space-y-3">
         <p class="text-xs text-slate-400">புதிய வினாக்களைச் சேர்க்க கடவுச்சொல்லை உள்ளிடவும்.</p>
         <input type="password" id="adminPassInput" placeholder="கடவுச்சொல் (Password)" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-sm outline-none focus:border-emerald-500 text-slate-100">
@@ -74,67 +104,238 @@
         </div>
       </div>
 
+      <!-- Add Question Form -->
       <div id="adminPanelSection" class="hidden space-y-3">
-        <p class="text-xs font-semibold text-emerald-400">புதிய வினா சேர்க்க</p>
-        <input id="newSubject" placeholder="பாடம் (எ.கா: பொது அறிவு)" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-100">
-        <textarea id="newQuestion" placeholder="வினா" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs h-16 text-slate-100"></textarea>
-        <input id="opt0" placeholder="விருப்பம் 1" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-100">
-        <input id="opt1" placeholder="விருப்பம் 2" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-100">
-        <input id="opt2" placeholder="விருப்பம் 3" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-100">
-        <input id="opt3" placeholder="விருப்பம் 4" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-100">
-        <select id="correctOpt" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-100">
-          <option value="0">விருப்பம் 1 சரி</option>
-          <option value="1">விருப்பம் 2 சரி</option>
-          <option value="2">விருப்பம் 3 சரி</option>
-          <option value="3">விருப்பம் 4 சரி</option>
-        </select>
-        <textarea id="newExplanation" placeholder="விளக்கம்" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs h-12 text-slate-100"></textarea>
-        <button onclick="saveQuestion()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-2 rounded-lg text-xs">சேமி</button>
+        <div class="border-b border-slate-800 pb-2">
+          <p class="text-xs font-bold text-emerald-400">புதிய வினா சேர்க்கும் படிவம்</p>
+          <p class="text-[11px] text-slate-400">சரியான பாடப்பிரிவைத் தேர்ந்தெடுத்து வினாவைச் சேர்க்கவும்</p>
+        </div>
+
+        <div>
+          <label class="text-[11px] text-slate-300 font-semibold block mb-1">பாடப்பிரிவு (Category):</label>
+          <select id="newCategory" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-emerald-400 font-bold outline-none focus:border-emerald-500">
+            <option value="பொதுத்தமிழ்">பொதுத்தமிழ்</option>
+            <option value="இந்திய ஆட்சியியல்">இந்திய ஆட்சியியல் (Polity)</option>
+            <option value="இந்திய வரலாறு">இந்திய வரலாறு (History)</option>
+            <option value="இந்தியப் பொருளாதாரம்">இந்தியப் பொருளாதாரம் (Economy)</option>
+            <option value="தமிழ்நாடு நிர்வாகம்">தமிழ்நாடு நிர்வாகம் (TN Admin - Unit 9)</option>
+            <option value="தமிழ்நாடு மரபு & பண்பாடு">தமிழ்நாடு மரபு & பண்பாடு (Unit 8)</option>
+            <option value="புவியியல்">புவியியல் (Geography)</option>
+            <option value="பொது அறிவியல்">பொது அறிவியல் (Science)</option>
+            <option value="கணிதம் & திறனறிவு">கணிதம் & திறனறிவு (Aptitude)</option>
+            <option value="நடப்பு நிகழ்வுகள்">நடப்பு நிகழ்வுகள் (Current Affairs)</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-[11px] text-slate-300 block mb-1">வினா (Question):</label>
+          <textarea id="newQuestion" placeholder="வினாவை இங்கே தட்டச்சு செய்யவும்..." class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs h-16 text-slate-100 outline-none focus:border-emerald-500"></textarea>
+        </div>
+
+        <div class="space-y-1.5">
+          <label class="text-[11px] text-slate-300 block">விடைகள் (Options):</label>
+          <input id="opt0" placeholder="விருப்பம் 1 (Option A)" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-100 outline-none focus:border-emerald-500">
+          <input id="opt1" placeholder="விருப்பம் 2 (Option B)" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-100 outline-none focus:border-emerald-500">
+          <input id="opt2" placeholder="விருப்பம் 3 (Option C)" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-100 outline-none focus:border-emerald-500">
+          <input id="opt3" placeholder="விருப்பம் 4 (Option D)" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-100 outline-none focus:border-emerald-500">
+        </div>
+        
+        <div>
+          <label class="text-[11px] text-emerald-400 font-bold block mb-1">சரியான விடை எது?:</label>
+          <select id="correctOpt" class="w-full bg-slate-950 border border-emerald-500/50 rounded-lg p-2 text-xs text-slate-100 outline-none">
+            <option value="0">விருப்பம் 1 (Option A) சரி</option>
+            <option value="1">விருப்பம் 2 (Option B) சரி</option>
+            <option value="2">விருப்பம் 3 (Option C) சரி</option>
+            <option value="3">விருப்பம் 4 (Option D) சரி</option>
+          </select>
+        </div>
+        
+        <div>
+          <label class="text-[11px] text-slate-300 block mb-1">விளக்கம் (Explanation):</label>
+          <textarea id="newExplanation" placeholder="சரியான விடைக்கான விளக்கம் (விருப்பப்பட்டால்)..." class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs h-12 text-slate-100 outline-none focus:border-emerald-500"></textarea>
+        </div>
+
+        <button onclick="saveQuestion()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-2.5 rounded-lg text-xs transition">சேமி (Save Question)</button>
       </div>
     </div>
   </div>
 
   <script>
-    const defaultQuestions = [
+    // அனைத்து TNPSC பாடப்பிரிவுகளின் பட்டியல்
+    const categoriesData = [
+      { id: "பொதுத்தமிழ்", title: "பொதுத்தமிழ்", icon: "fa-book-open", color: "from-rose-500/20 to-orange-500/20", border: "border-rose-500/40" },
+      { id: "இந்திய ஆட்சியியல்", title: "ஆட்சியியல் (Polity)", icon: "fa-landmark", color: "from-blue-500/20 to-cyan-500/20", border: "border-blue-500/40" },
+      { id: "இந்திய வரலாறு", title: "வரலாறு (History)", icon: "fa-monument", color: "from-amber-500/20 to-yellow-500/20", border: "border-amber-500/40" },
+      { id: "இந்தியப் பொருளாதாரம்", title: "பொருளாதாரம்", icon: "fa-chart-line", color: "from-emerald-500/20 to-teal-500/20", border: "border-emerald-500/40" },
+      { id: "தமிழ்நாடு நிர்வாகம்", title: "தமிழக நிர்வாகம் (Unit 9)", icon: "fa-building-columns", color: "from-cyan-500/20 to-blue-500/20", border: "border-cyan-500/40" },
+      { id: "தமிழ்நாடு மரபு & பண்பாடு", title: "தமிழக மரபு (Unit 8)", icon: "fa-gopuram", color: "from-red-500/20 to-amber-500/20", border: "border-red-500/40" },
+      { id: "புவியியல்", title: "புவியியல்", icon: "fa-earth-asia", color: "from-indigo-500/20 to-purple-500/20", border: "border-indigo-500/40" },
+      { id: "பொது அறிவியல்", title: "பொது அறிவியல்", icon: "fa-flask-vial", color: "from-violet-500/20 to-fuchsia-500/20", border: "border-violet-500/40" },
+      { id: "கணிதம் & திறனறிவு", title: "கணிதம் & திறனறிவு", icon: "fa-calculator", color: "from-pink-500/20 to-rose-500/20", border: "border-pink-500/40" },
+      { id: "நடப்பு நிகழ்வுகள்", title: "நடப்பு நிகழ்வுகள்", icon: "fa-newspaper", color: "from-teal-500/20 to-emerald-500/20", border: "border-teal-500/40" }
+    ];
+
+    // மாதிரி வினாக்கள்
+    const sampleQuestions = [
+      // 1. பொதுத்தமிழ்
       {
-        subject: "இந்திய ஆட்சியியல்",
+        category: "பொதுத்தமிழ்",
+        question: "தேம்பாவணி நூலின் ஆசிரியர் யார்?",
+        options: ["வீரமாமுனிவர்", "ஜி.யு.போப்", "உமறுப்புலவர்", "எச்.ஏ.கிருஷ்ணப்பிள்ளை"],
+        answer: 0,
+        explanation: "தேம்பாவணி வீரமாமுனிவரால் இயற்றப்பட்டது."
+      },
+      // 2. இந்திய ஆட்சியியல்
+      {
+        category: "இந்திய ஆட்சியியல்",
         question: "இந்திய அரசியலமைப்பின் 75(4) உறுப்பு எதனைப் பற்றிக் குறிப்பிடுகிறது?",
         options: ["பிரதமரின் நியமனம்", "அமைச்சர்களின் பதவிப் பிரமாணம்", "மக்களவை கலைப்பு", "குடியரசுத் தலைவர் தேர்தல்"],
         answer: 1,
         explanation: "உறுப்பு 75(4)ன் படி குடியரசுத் தலைவர் அமைச்சர்களுக்கு பதவிப் பிரமாணமும் இரகசியக் காப்புப் பிரமாணமும் செய்து வைக்கிறார்."
+      },
+      // 3. தமிழ்நாடு நிர்வாகம் (Unit 9)
+      {
+        category: "தமிழ்நாடு நிர்வாகம்",
+        question: "தமிழ்நாட்டில் 'லோக் ஆயுக்தா' சட்டம் எந்த ஆண்டு சட்டப் பேரவையில் நிறைவேற்றப்பட்டது?",
+        options: ["2016", "2018", "2019", "2021"],
+        answer: 1,
+        explanation: "தமிழ்நாடு லோக் ஆயுக்தா சட்டம் ஜூலை 9, 2018 அன்று சட்டமன்றத்தில் நிறைவேற்றப்பட்டது."
+      },
+      // 4. தமிழ்நாடு மரபு & பண்பாடு (Unit 8)
+      {
+        category: "தமிழ்நாடு மரபு & பண்பாடு",
+        question: "கீழடி அகழாய்வு தளம் தமிழ்நாட்டின் எந்த மாவட்டத்தில் அமைந்துள்ளது?",
+        options: ["மதுரை", "சிவகங்கை", "ராமநாதபுரம்", "புதுக்கோட்டை"],
+        answer: 1,
+        explanation: "கீழடி வைகை நதிக்கரையில் சிவகங்கை மாவட்டத்தில் உள்ள திருப்புவனம் வட்டத்தில் அமைந்துள்ளது."
+      },
+      // 5. இந்திய வரலாறு
+      {
+        category: "இந்திய வரலாறு",
+        question: "மொகஞ்சதாரோ எந்த நதிக்கரையில் அமைந்துள்ளது?",
+        options: ["ராவி", "சிந்து", "சரஸ்வதி", "சட்லஜ்"],
+        answer: 1,
+        explanation: "மொகஞ்சதாரோ சிந்து நதிக்கரையில் பாகிஸ்தானின் லர்கானா மாவட்டத்தில் அமைந்துள்ளது."
+      },
+      // 6. இந்தியப் பொருளாதாரம்
+      {
+        category: "இந்தியப் பொருளாதாரம்",
+        question: "நிதி ஆயோக் (NITI Aayog) எப்போது தொடங்கப்பட்டது?",
+        options: ["ஜனவரி 1, 2014", "ஜனவரி 1, 2015", "ஆகஸ்ட் 15, 2014", "ஏப்ரல் 1, 2015"],
+        answer: 1,
+        explanation: "திட்டக் குழுவிற்கு மாற்றாக ஜனவரி 1, 2015 அன்று நிதி ஆயோக் நடைமுறைக்கு வந்தது."
+      },
+      // 7. புவியியல்
+      {
+        category: "புவியியல்",
+        question: "தென்னிந்தியாவின் மிக உயரமான சிகரம் எது?",
+        options: ["தொட்டபெட்டா", "ஆனைமுடி", "மகேந்திரகிரி", "அகஸ்தியர் மலை"],
+        answer: 1,
+        explanation: "ஆனைமுடி (2695 மீ) தென்னிந்தியாவின் மிக உயரமான சிகரமாகும்."
+      },
+      // 8. பொது அறிவியல்
+      {
+        category: "பொது அறிவியல்",
+        question: "மனித இரத்தத்தின் சராசரி pH மதிப்பு என்ன?",
+        options: ["6.4", "7.4", "8.4", "5.4"],
+        answer: 1,
+        explanation: "மனித இரத்தத்தின் சராசரி pH மதிப்பு காரத்தன்மை கொண்ட சுமார் 7.4 ஆகும்."
+      },
+      // 9. கணிதம்
+      {
+        category: "கணிதம் & திறனறிவு",
+        question: "2, 4, 8, 16, 32, ... அடுத்த எண் என்ன?",
+        options: ["48", "60", "64", "72"],
+        answer: 2,
+        explanation: "ஒவ்வொரு எண்ணும் 2 ஆல் பெருக்கப்படுகிறது. 32 × 2 = 64."
+      },
+      // 10. நடப்பு நிகழ்வுகள்
+      {
+        category: "நடப்பு நிகழ்வுகள்",
+        question: "புதிய கல்விக் கொள்கை (NEP) எந்த ஆண்டு மத்திய அரசால் அங்கீகரிக்கப்பட்டது?",
+        options: ["2018", "2019", "2020", "2022"],
+        answer: 2,
+        explanation: "புதிய கல்விக் கொள்கை 2020 ஜூலை 29 அன்று மத்திய அமைச்சரவையால் ஏற்கப்பட்டது."
       }
     ];
 
-    let questions = JSON.parse(localStorage.getItem('tnpsc_questions')) || defaultQuestions;
+    let savedData = localStorage.getItem('love_tnpsc_v4');
+    let questions = savedData ? JSON.parse(savedData) : sampleQuestions;
+    if (!savedData) {
+      localStorage.setItem('love_tnpsc_v4', JSON.stringify(questions));
+    }
+
+    let currentCategory = "";
+    let activeQuestions = [];
     let currentIndex = 0;
     let score = 0;
     let selectedAnswer = null;
 
-    function startQuiz() {
-      document.getElementById('screenStart').classList.add('hidden');
+    function renderCategories() {
+      const grid = document.getElementById('categoryGrid');
+      grid.innerHTML = '';
+
+      categoriesData.forEach(cat => {
+        const count = questions.filter(q => q.category === cat.id).length;
+        const card = document.createElement('div');
+        card.className = `p-4 rounded-2xl bg-gradient-to-br ${cat.color} border ${cat.border} flex flex-col justify-between cursor-pointer active:scale-95 transition shadow-lg min-h-[110px]`;
+        card.onclick = () => startCategoryQuiz(cat.id);
+        card.innerHTML = `
+          <div class="flex justify-between items-start mb-2">
+            <span class="text-xl text-slate-100"><i class="fa-solid ${cat.icon}"></i></span>
+            <span class="text-[10px] bg-slate-900/90 px-2 py-0.5 rounded-full text-slate-300 font-bold border border-slate-800">${count} வினாக்கள்</span>
+          </div>
+          <h3 class="font-bold text-xs sm:text-sm text-slate-100">${cat.title}</h3>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function startCategoryQuiz(catId) {
+      currentCategory = catId;
+      activeQuestions = questions.filter(q => q.category === catId);
+
+      if (activeQuestions.length === 0) {
+        alert("இந்தப் பாடப்பிரிவில் இதுவரை வினாக்கள் சேர்க்கப்படவில்லை! அட்மின் பகுதியில் சென்று சேர்க்கவும்.");
+        return;
+      }
+
+      document.getElementById('screenCategories').classList.add('hidden');
       document.getElementById('screenResult').classList.add('hidden');
       document.getElementById('screenQuiz').classList.remove('hidden');
+
       currentIndex = 0;
       score = 0;
       loadQuestion();
+    }
+
+    function restartCategoryQuiz() {
+      startCategoryQuiz(currentCategory);
+    }
+
+    function backToCategories() {
+      document.getElementById('screenQuiz').classList.add('hidden');
+      document.getElementById('screenResult').classList.add('hidden');
+      document.getElementById('screenCategories').classList.remove('hidden');
+      renderCategories();
     }
 
     function loadQuestion() {
       selectedAnswer = null;
       document.getElementById('explanationCard').classList.add('hidden');
       document.getElementById('btnNext').classList.add('hidden');
-      
-      const q = questions[currentIndex];
-      document.getElementById('qCountText').textContent = `வினா ${currentIndex + 1}/${questions.length}`;
-      document.getElementById('qSubjectTag').textContent = q.subject || "TNPSC";
-      document.getElementById('progressBar').style.width = `${((currentIndex) / questions.length) * 100}%`;
+
+      const q = activeQuestions[currentIndex];
+      document.getElementById('qSubjectTag').textContent = q.category;
+      document.getElementById('qCountText').textContent = `வினா ${currentIndex + 1}/${activeQuestions.length}`;
+      document.getElementById('progressBar').style.width = `${((currentIndex) / activeQuestions.length) * 100}%`;
       document.getElementById('qText').textContent = q.question;
 
       const container = document.getElementById('optionsContainer');
       container.innerHTML = '';
       q.options.forEach((opt, idx) => {
         const btn = document.createElement('button');
-        btn.className = "w-full text-left p-3.5 rounded-xl border border-slate-800 bg-slate-950 hover:bg-slate-900 transition text-sm flex items-center justify-between";
+        btn.className = "w-full text-left p-3.5 rounded-xl border border-slate-800 bg-slate-950 hover:bg-slate-900 transition text-xs sm:text-sm text-slate-200 flex items-center justify-between";
         btn.textContent = opt;
         btn.onclick = () => selectOption(idx);
         container.appendChild(btn);
@@ -144,15 +345,15 @@
     function selectOption(idx) {
       if (selectedAnswer !== null) return;
       selectedAnswer = idx;
-      const q = questions[currentIndex];
+      const q = activeQuestions[currentIndex];
       const buttons = document.getElementById('optionsContainer').children;
 
       if (idx === q.answer) {
-        buttons[idx].classList.add('border-emerald-500', 'bg-emerald-950/40', 'text-emerald-300');
+        buttons[idx].classList.add('border-emerald-500', 'bg-emerald-950/50', 'text-emerald-300', 'font-bold');
         score++;
       } else {
-        buttons[idx].classList.add('border-rose-500', 'bg-rose-950/40', 'text-rose-300');
-        buttons[q.answer].classList.add('border-emerald-500', 'bg-emerald-950/40', 'text-emerald-300');
+        buttons[idx].classList.add('border-rose-500', 'bg-rose-950/50', 'text-rose-300');
+        buttons[q.answer].classList.add('border-emerald-500', 'bg-emerald-950/50', 'text-emerald-300', 'font-bold');
       }
 
       if (q.explanation) {
@@ -165,7 +366,7 @@
 
     function nextQuestion() {
       currentIndex++;
-      if (currentIndex < questions.length) {
+      if (currentIndex < activeQuestions.length) {
         loadQuestion();
       } else {
         showResults();
@@ -175,7 +376,8 @@
     function showResults() {
       document.getElementById('screenQuiz').classList.add('hidden');
       document.getElementById('screenResult').classList.remove('hidden');
-      document.getElementById('scoreText').textContent = `${score} / ${questions.length}`;
+      document.getElementById('resultSubject').textContent = currentCategory;
+      document.getElementById('scoreText').textContent = `${score} / ${activeQuestions.length}`;
     }
 
     function openAdmin() {
@@ -200,8 +402,8 @@
     }
 
     function saveQuestion() {
+      const cat = document.getElementById('newCategory').value;
       const q = document.getElementById('newQuestion').value.trim();
-      const s = document.getElementById('newSubject').value.trim();
       const o0 = document.getElementById('opt0').value.trim();
       const o1 = document.getElementById('opt1').value.trim();
       const o2 = document.getElementById('opt2').value.trim();
@@ -210,23 +412,35 @@
       const exp = document.getElementById('newExplanation').value.trim();
 
       if (!q || !o0 || !o1 || !o2 || !o3) {
-        alert("அனைத்து விவரங்களையும் நிரப்பவும்!");
+        alert("வினா மற்றும் 4 விருப்பங்களையும் பூர்த்தி செய்யவும்!");
         return;
       }
 
-      questions.push({
-        subject: s || "TNPSC",
+      const newEntry = {
+        category: cat,
         question: q,
         options: [o0, o1, o2, o3],
         answer: ans,
         explanation: exp
-      });
+      };
 
-      localStorage.setItem('tnpsc_questions', JSON.stringify(questions));
-      alert("வினா வெற்றிகரமாகச் சேர்க்கப்பட்டது!");
+      questions.push(newEntry);
+      localStorage.setItem('love_tnpsc_v4', JSON.stringify(questions));
+
+      alert(`${cat} பாடப்பிரிவில் வினா வெற்றிகரமாகச் சேர்க்கப்பட்டது!`);
+
+      document.getElementById('newQuestion').value = '';
+      document.getElementById('opt0').value = '';
+      document.getElementById('opt1').value = '';
+      document.getElementById('opt2').value = '';
+      document.getElementById('opt3').value = '';
+      document.getElementById('newExplanation').value = '';
+
       closeAdmin();
-      loadQuestion();
+      renderCategories();
     }
+
+    renderCategories();
   </script>
 </body>
 </html>
