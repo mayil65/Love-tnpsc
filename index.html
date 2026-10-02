@@ -132,9 +132,9 @@
         <p class="text-xs text-emerald-400 font-semibold" id="adCountdownText">தயவுசெய்து 10 விநாடிகள் காத்திருக்கவும்</p>
       </div>
 
-      <!-- Small Banner Inside Modal (Adsterra 320x50 Ad Unit) -->
-      <div class="w-full max-w-[320px] h-[55px] mx-auto bg-slate-950 border border-slate-800/80 rounded-xl flex items-center justify-center overflow-hidden">
-        <div id="modalAdContainer" class="w-[320px] h-[50px] flex items-center justify-center"></div>
+      <!-- Small Banner Inside Modal (Adsterra Safe Container) -->
+      <div class="w-full max-w-[320px] min-h-[60px] mx-auto bg-slate-950 border border-slate-800/80 rounded-xl flex items-center justify-center p-1 overflow-hidden">
+        <iframe id="modalAdFrame" class="w-[320px] h-[52px] border-0 overflow-hidden bg-transparent"></iframe>
       </div>
 
       <!-- Close / Start Quiz Button -->
@@ -460,25 +460,36 @@
       });
     }
 
-    // 10 விநாடி பாப்-அப் விளம்பரத் திரை (Adsterra Direct Iframe Embed)
+    // 10 விநாடி பாப்-அப் விளம்பரத் திரை (Render Ad inside Iframe document safely)
     function triggerAdBeforeQuiz(testName) {
       pendingTest = testName;
       const modal = document.getElementById('adModal');
       const countdownText = document.getElementById('adCountdownText');
       const btnSkip = document.getElementById('btnSkipAd');
-      const adContainer = document.getElementById('modalAdContainer');
+      const frame = document.getElementById('modalAdFrame');
 
-      // விளம்பரத்தை நேரடியாக Iframe மூலம் லோட் செய்தல்
-      adContainer.innerHTML = `
-        <iframe 
-          src="https://www.highrevenueformat.com/853486a16277f98252f9b41931818810/invoke.js" 
-          width="320" 
-          height="50" 
-          frameborder="0" 
-          scrolling="no" 
-          class="border-0 overflow-hidden">
-        </iframe>
-      `;
+      // விளம்பரக் குறியீட்டை Iframe ஆவணத்தில் நேரடியாக எழுதி இயக்குதல்
+      const doc = frame.contentWindow || frame.contentDocument.document || frame.contentDocument;
+      doc.document.open();
+      doc.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head><base target="_blank"></head>
+        <body style="margin:0;padding:0;background:transparent;display:flex;justify-content:center;align-items:center;">
+          <script type="text/javascript">
+            atOptions = {
+              'key' : '853486a16277f98252f9b41931818810',
+              'format' : 'iframe',
+              'height' : 50,
+              'width' : 320,
+              'params' : {}
+            };
+          <\/script>
+          <script type="text/javascript" src="https://www.highrevenueformat.com/853486a16277f98252f9b41931818810/invoke.js"><\/script>
+        </body>
+        </html>
+      `);
+      doc.document.close();
 
       modal.classList.remove('hidden');
       let timeLeft = 10;
