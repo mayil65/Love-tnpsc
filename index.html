@@ -7,7 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <!-- Firebase Scripts (Compat Version for Vanilla JS) -->
+  <!-- Firebase Scripts -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
@@ -26,7 +26,7 @@
       <span id="syncIndicator" class="text-[10px] text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 px-2 py-0.5 rounded-full flex items-center gap-1 font-bold">
         <i class="fa-solid fa-circle-dot text-[8px] animate-pulse"></i> Live Sync
       </span>
-      <button onclick="openAdmin()" class="bg-slate-800 hover:bg-slate-700 text-xs px-3.5 py-1.5 rounded-lg border border-slate-700 text-slate-200 font-bold transition">Admin</button>
+      <button id="headerAdminBtn" onclick="openAdmin()" class="bg-slate-800 hover:bg-slate-700 text-xs px-3.5 py-1.5 rounded-lg border border-slate-700 text-slate-200 font-bold transition">Admin</button>
     </div>
   </header>
 
@@ -60,7 +60,7 @@
       <div class="space-y-2.5" id="topicList"></div>
     </section>
 
-    <!-- 3. Tests List Screen (Direct In-Topic Bulk Upload & Delete Here!) -->
+    <!-- 3. Tests List Screen (Secured) -->
     <section id="screenTests" class="hidden space-y-4">
       <div class="flex justify-between items-center text-xs font-semibold text-slate-400">
         <button onclick="backToTopics()" class="text-emerald-400 hover:text-emerald-300 flex items-center gap-1 font-bold">
@@ -69,11 +69,13 @@
         <span id="testsHeaderTitle" class="bg-slate-800 text-emerald-400 border border-slate-700 px-2.5 py-1 rounded-full text-[11px] font-bold truncate max-w-[150px]"></span>
       </div>
 
-      <!-- Quick Upload Button directly inside the active topic -->
-      <div class="bg-slate-900 border border-emerald-500/30 p-3 rounded-2xl flex items-center justify-between shadow-lg">
+      <!-- Quick Upload Button - ADMIN ONLY -->
+      <div id="adminDirectUploadBox" class="hidden bg-slate-900 border border-emerald-500/30 p-3 rounded-2xl flex items-center justify-between shadow-lg">
         <div>
-          <h4 class="text-xs font-bold text-slate-200">இந்தத் தலைப்பில் வினாக்கள் சேர்க்கவா?</h4>
-          <p class="text-[10px] text-slate-400">தேர்வு மற்றும் பல்க் கோடை நேரடியாக இங்கே ஏற்றலாம்</p>
+          <h4 class="text-xs font-bold text-emerald-400 flex items-center gap-1">
+            <i class="fa-solid fa-shield-halved"></i> நிர்வாகி பகுதி (Admin Only)
+          </h4>
+          <p class="text-[10px] text-slate-400">இந்தத் தலைப்பில் பல்க் வினாக்களைச் சேர்க்கவும்</p>
         </div>
         <button onclick="openDirectUploadModal()" class="px-3 py-2 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold rounded-xl text-xs flex items-center gap-1.5 transition shadow">
           <i class="fa-solid fa-file-circle-plus"></i> + பல்க் அப்லோட்
@@ -82,7 +84,7 @@
 
       <div class="text-center space-y-1 py-1">
         <h2 class="text-base font-bold text-slate-100">தேர்வுப் பட்டியல் (Online Tests)</h2>
-        <p class="text-xs text-slate-400">பயிற்சி செய்யத் தொடங்குங்கள் அல்லது நிர்வகியுங்கள்</p>
+        <p class="text-xs text-slate-400">நீங்கள் பயிற்சி செய்ய விரும்பும் தேர்வினைத் தொடங்குங்கள்</p>
       </div>
 
       <div class="space-y-2.5" id="testList"></div>
@@ -145,7 +147,7 @@
 
   </main>
 
-  <!-- Clean In-Screen Ad Modal -->
+  <!-- In-Screen Ad Modal -->
   <div id="adModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex flex-col items-center justify-center p-4 text-center">
     <div class="max-w-sm w-full bg-slate-900 border border-slate-800 p-5 rounded-3xl shadow-2xl space-y-4">
       <div class="space-y-1">
@@ -179,12 +181,12 @@
     </div>
   </div>
 
-  <!-- Direct In-Topic Upload Modal -->
+  <!-- Direct In-Topic Upload Modal (Admin Only) -->
   <div id="directUploadModal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-slate-800 w-full max-w-lg rounded-2xl p-5 space-y-4 shadow-2xl">
       <div class="flex justify-between items-center border-b border-slate-800 pb-3">
         <div>
-          <h3 class="font-bold text-slate-100 text-sm">நேரடி பல்க் அப்லோட்</h3>
+          <h3 class="font-bold text-slate-100 text-sm">நேரடி பல்க் அப்லோட் (Admin)</h3>
           <p id="directUploadTargetText" class="text-[11px] text-emerald-400 font-semibold"></p>
         </div>
         <button onclick="closeDirectUploadModal()" class="text-slate-400 hover:text-white font-bold text-lg">✕</button>
@@ -206,16 +208,16 @@
     </div>
   </div>
 
-  <!-- Admin Modal -->
+  <!-- Admin Login Modal -->
   <div id="adminModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-slate-800 w-full max-w-lg rounded-2xl p-5 space-y-4 max-h-[90vh] overflow-y-auto shadow-2xl">
+    <div class="bg-slate-900 border border-slate-800 w-full max-w-sm rounded-2xl p-5 space-y-4 shadow-2xl">
       <div class="flex justify-between items-center border-b border-slate-800 pb-3">
         <h3 class="font-bold text-slate-100 text-sm">நிர்வாகி பகுதி (Admin Login)</h3>
         <button onclick="closeAdmin()" class="text-slate-400 hover:text-white font-bold text-lg">✕</button>
       </div>
 
       <div id="adminAuthSection" class="space-y-3">
-        <p class="text-xs text-slate-400">நிர்வாக வசதிகளைப் பயன்படுத்த கடவுச்சொல்லை உள்ளிடவும்.</p>
+        <p class="text-xs text-slate-400">வினாக்களைச் சேர்க்க அல்லது நீக்க கடவுச்சொல்லை உள்ளிடவும்.</p>
         <input type="password" id="adminPassInput" placeholder="கடவுச்சொல் (Password)" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-sm outline-none focus:border-emerald-500 text-slate-100">
         <div class="flex gap-2">
           <button onclick="checkAdminPass()" class="flex-1 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-2 rounded-lg text-sm">உள்நுழை</button>
@@ -223,12 +225,18 @@
         </div>
       </div>
 
-      <div id="adminPanelSection" class="hidden space-y-4">
-        <p class="text-xs text-emerald-400 font-bold">நிர்வாகி அனுமதியளிக்கப்பட்டது!</p>
-        <p class="text-xs text-slate-300 leading-relaxed">
-          இப்போது நீங்கள் நேரடியாக முகப்புப் பக்கத்திலேயே எந்தவொரு பாடப்பிரிவு மற்றும் துணைத்தலைப்பைத் திறந்து, அங்கேயே இருக்கும் <b>"+ பல்க் அப்லோட்"</b> மற்றும் <b>"🗑️ நீக்கு"</b> பட்டன்களைப் பயன்படுத்தலாம்!
+      <div id="adminPanelSection" class="hidden space-y-3 text-center">
+        <div class="w-12 h-12 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto text-xl">
+          <i class="fa-solid fa-lock-open"></i>
+        </div>
+        <p class="text-xs text-emerald-400 font-bold">நிர்வாகி உள்நுழைந்துள்ளார்!</p>
+        <p class="text-[11px] text-slate-400">
+          இப்போது நீங்கள் நேரடியாகத் தலைப்புகளைத் திறந்து வினாக்களைச் சேர்க்கலாம் மற்றும் தேவையற்றவற்றை நீக்கலாம்.
         </p>
-        <button onclick="closeAdmin()" class="w-full bg-emerald-500 text-slate-950 font-bold py-2 rounded-lg text-xs">சரி, தளத்திற்குச் செல்</button>
+        <div class="pt-2 flex gap-2">
+          <button onclick="closeAdmin()" class="flex-1 bg-emerald-500 text-slate-950 font-bold py-2 rounded-lg text-xs">தொடர்க</button>
+          <button onclick="adminLogout()" class="px-3 bg-rose-500/20 text-rose-400 border border-rose-500/30 font-bold py-2 rounded-lg text-xs hover:bg-rose-500 hover:text-white transition">வெளியேறு</button>
+        </div>
       </div>
     </div>
   </div>
@@ -253,7 +261,7 @@
       "பொதுத்தமிழ்": ["பகுதி - அ: இலக்கணம்", "பகுதி - ஆ: இலக்கியம்", "பகுதி - இ: தமிழ் அறிஞர்களும் தமிழ்த் தொண்டும்"],
       "இந்திய ஆட்சியியல்": ["அரசியலமைப்பு உருவாக்கம் & முகப்புரை", "குடியுரிமை & அடிப்படை உரிமைகள், கடமைகள்", "மாநில அரசு & உள்ளாட்சி அமைப்புகள் (பஞ்சாயத்து)", "மத்திய அரசு (நாடாளுமன்றம் & அமைச்சரவை)", "நீதித்துறை (உச்ச & உயர் நீதிமன்றங்கள்)", "தேர்தல் ஆணையம் & ஊழல் தடுப்பு (லோக் ஆயுக்தா)"],
       "இந்திய வரலாறு": ["சிந்துவெளி நாகரிகம் & குப்தர்கள்", "சிந்துவெளி நாகரிகம் அவுட்சோர்ஸ் வினாக்கள்", "குப்தர்கள்", "டெல்லி சுல்தான்கள் & முகலாயர்கள்", "மராத்தியர்கள் & விஜயநகரப் பேரரசு", "1857 பெரும் புரட்சி & தொடக்க எழுச்சிகள்", "இந்திய தேசிய இயக்கம் & தலைவர்கள்"],
-      "தமிழ்நாடு மரபு & பண்பாடு": ["தமிழ் சமுதாய வரலாறு & தொல்லியல் சான்றுகள்", "திருக்குறள் (வாழ்வியல் & சமூக கருத்துக்கள்)", "விடுதலைப் போராட்டத்தில் தமிழ்நாட்டின் பங்கு", "19 & 20-ஆம் நூற்றாண்டு சமூக இயக்கங்கள் (நீதிக்கட்சி & சுயமரியாதை)"],
+      "தமிழ்நாடு மரபு & பண்பாடு": ["தமிழ் சமுதாய வரலாறு & தொல்லியல் சான்றுகள்", "விடுதலைப் போராட்டத்தில் பெண்களின் பங்கு", "திருக்குறள் (வாழ்வியல் & சமூக கருத்துக்கள்)", "விடுதலைப் போராட்டத்தில் தமிழ்நாட்டின் பங்கு", "19 & 20-ஆம் நூற்றாண்டு சமூக இயக்கங்கள் (நீதிக்கட்சி & சுயமரியாதை)"],
       "தமிழ்நாடு நிர்வாகம்": ["மனிதவள மேம்பாட்டுக் குறியீடுகள் (HDI)", "சமூக நீதியும் சமூக நல்லிணக்கமும்", "தமிழக அரசின் நலத்திட்டங்கள் & கல்வி முறை", "மின்னாளுமை (E-Governance in TN)"],
       "இந்தியப் பொருளாதாரம்": ["இந்தியப் பொருளாதாரத்தின் இயல்புகள்", "ஐந்தாண்டுத் திட்டங்கள் & நிதி ஆயோக் (NITI Aayog)", "ரிசர்வ் வங்கி (RBI) & நிதி ஆணையம்", "சரக்கு மற்றும் சேவை வரி (GST)", "வேலைவாய்ப்பு & ஊரக நலம்"],
       "புவியியல்": ["அமைவிடம், இயற்கை அமைவு & பருவமழை", "நீர் வளம், ஆறுகள் & மண் வகைகள்", "வேளாண் முறைகள் & முக்கியப் பயிர்கள்", "மக்கள் தொகை அடர்த்தி & பேரிடர் மேலாண்மை"],
@@ -371,6 +379,13 @@
       document.getElementById('screenTests').classList.remove('hidden');
       document.getElementById('testsHeaderTitle').textContent = topic;
 
+      const adminUploadBox = document.getElementById('adminDirectUploadBox');
+      if (isAdminLoggedIn) {
+        adminUploadBox.classList.remove('hidden');
+      } else {
+        adminUploadBox.classList.add('hidden');
+      }
+
       const testList = document.getElementById('testList');
       testList.innerHTML = '';
 
@@ -387,7 +402,7 @@
         testList.innerHTML = `
           <div class="p-8 text-center text-slate-400 text-xs bg-slate-900 border border-slate-800 rounded-2xl space-y-3">
             <p>இந்தத் தலைப்பில் இதுவரை தேர்வுகள் சேர்க்கப்படவில்லை!</p>
-            <button onclick="openDirectUploadModal()" class="px-4 py-2 bg-emerald-500 text-slate-950 font-bold rounded-xl text-xs">+ முதல் தேர்வைச் சேர்க்கவும்</button>
+            ${isAdminLoggedIn ? '<button onclick="openDirectUploadModal()" class="px-4 py-2 bg-emerald-500 text-slate-950 font-bold rounded-xl text-xs">+ முதல் தேர்வைச் சேர்க்கவும்</button>' : '<p class="text-slate-500">விரைவில் வினாக்கள் பதிவேற்றப்படும்.</p>'}
           </div>
         `;
         return;
@@ -397,6 +412,13 @@
         const qCount = testMap[testName];
         const card = document.createElement('div');
         card.className = "p-3.5 rounded-xl bg-slate-900 border border-slate-800 flex justify-between items-center transition shadow";
+        
+        const deleteButtonHtml = isAdminLoggedIn ? `
+          <button onclick="deleteDirectTest('${testName}', ${qCount})" title="இந்தத் தேர்வை நீக்கு (Admin Only)" class="p-1.5 text-rose-400 hover:bg-rose-950/60 rounded-lg text-xs transition border border-rose-900/40 ml-1">
+            <i class="fa-solid fa-trash-can"></i>
+          </button>
+        ` : '';
+
         card.innerHTML = `
           <div class="space-y-0.5 cursor-pointer flex-1" onclick="triggerAdBeforeQuiz('${testName}')">
             <h4 class="text-xs sm:text-sm font-bold text-slate-200 flex items-center gap-2">
@@ -404,21 +426,22 @@
             </h4>
             <p class="text-[10px] text-slate-400">${qCount} வினாக்கள் • பயிற்சி செய்யத் தொடங்கு</p>
           </div>
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-1.5">
             <button onclick="triggerAdBeforeQuiz('${testName}')" class="px-2.5 py-1.5 bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500 hover:text-slate-950 rounded-lg text-xs font-bold transition flex items-center gap-1">
               <i class="fa-solid fa-play text-[10px]"></i> தொடங்கு
             </button>
-            <button onclick="deleteDirectTest('${testName}', ${qCount})" title="இந்தத் தேர்வை நீக்கு" class="p-1.5 text-rose-400 hover:bg-rose-950/60 rounded-lg text-xs transition border border-rose-900/40">
-              <i class="fa-solid fa-trash-can"></i>
-            </button>
+            ${deleteButtonHtml}
           </div>
         `;
         testList.appendChild(card);
       });
     }
 
-    // --- DIRECT IN-TOPIC BULK UPLOAD ---
     function openDirectUploadModal() {
+      if (!isAdminLoggedIn) {
+        openAdmin();
+        return;
+      }
       document.getElementById('directUploadTargetText').textContent = `${currentCategory} ➔ ${currentTopic}`;
       document.getElementById('directJsonInput').value = '';
       document.getElementById('directUploadModal').classList.remove('hidden');
@@ -429,6 +452,11 @@
     }
 
     function submitDirectBulkUpload() {
+      if (!isAdminLoggedIn) {
+        alert("அனுமதி மறுக்கப்பட்டது! நிர்வாகி கடவுச்சொல் தேவை.");
+        return;
+      }
+
       const testName = document.getElementById('directTestNameInput').value.trim() || "மாதிரித் தேர்வு 1";
       const rawText = document.getElementById('directJsonInput').value.trim();
 
@@ -475,10 +503,17 @@
       }
     }
 
-    // Direct Delete Single Test
     function deleteDirectTest(testName, count) {
-      const confirmDelete = confirm(`எச்சரிக்கை: "${testName}" தேர்வில் உள்ள ${count} வினாக்களையும் நிரந்தரமாக நீக்கவா?`);
-      if (!confirmDelete) return;
+      if (!isAdminLoggedIn) {
+        alert("அனுமதி மறுக்கப்பட்டது! நிர்வாகி கடவுச்சொல் இல்லாமல் வினாக்களை நீக்க முடியாது.");
+        return;
+      }
+
+      const pass = prompt(`"${testName}" தேர்வை நீக்க அட்மின் கடவுச்சொல்லை உள்ளிடவும்:`);
+      if (pass !== "Vrsd8773") {
+        alert("தவறான கடவுச்சொல்! நீக்க முடியாது.");
+        return;
+      }
 
       const updates = {};
       for (let key in cloudRawData) {
@@ -496,7 +531,6 @@
       });
     }
 
-    // Quiz Play Functions
     function triggerAdBeforeQuiz(testName) {
       pendingTest = testName;
       const modal = document.getElementById('adModal');
@@ -690,12 +724,16 @@
       document.getElementById('scoreText').textContent = `${finalScore} / ${activeQuestions.length}`;
     }
 
-    // Admin Auth
     function openAdmin() {
       document.getElementById('adminModal').classList.remove('hidden');
-      document.getElementById('adminAuthSection').classList.remove('hidden');
-      document.getElementById('adminPanelSection').classList.add('hidden');
-      document.getElementById('adminPassInput').value = '';
+      if (isAdminLoggedIn) {
+        document.getElementById('adminAuthSection').classList.add('hidden');
+        document.getElementById('adminPanelSection').classList.remove('hidden');
+      } else {
+        document.getElementById('adminAuthSection').classList.remove('hidden');
+        document.getElementById('adminPanelSection').classList.add('hidden');
+        document.getElementById('adminPassInput').value = '';
+      }
     }
 
     function closeAdmin() {
@@ -708,9 +746,23 @@
         isAdminLoggedIn = true;
         document.getElementById('adminAuthSection').classList.add('hidden');
         document.getElementById('adminPanelSection').classList.remove('hidden');
+        document.getElementById('headerAdminBtn').innerHTML = `<i class="fa-solid fa-lock-open text-emerald-400"></i> Admin`;
+        if (!document.getElementById('screenTests').classList.contains('hidden')) {
+          openTestsScreen(currentTopic);
+        }
       } else {
-        alert("தவறான கடவுச்சொல்!");
+        alert("தவறான கடவுச்சொல்! நீங்கள் நிர்வாகி அல்ல.");
       }
+    }
+
+    function adminLogout() {
+      isAdminLoggedIn = false;
+      document.getElementById('headerAdminBtn').textContent = "Admin";
+      closeAdmin();
+      if (!document.getElementById('screenTests').classList.contains('hidden')) {
+        openTestsScreen(currentTopic);
+      }
+      alert("நிர்வாகி பகுதியிலிருந்து வெளியேறிவிட்டீர்கள்.");
     }
 
     renderCategories();
