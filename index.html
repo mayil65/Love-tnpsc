@@ -11,7 +11,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
-  <!-- New Adsterra Native Banner Script -->
+  <!-- Adsterra Native Banner Script -->
   <script async="async" data-cfasync="false" src="https://pl31633681.profitableratecpmnetwork.com/fe4c7de6c8528516275d9e0d1f7f22ac/invoke.js"></script>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans select-none pb-24">
@@ -134,7 +134,7 @@
 
   </main>
 
-  <!-- Clean In-Screen Ad Modal (With New Native Banner) -->
+  <!-- Clean In-Screen Ad Modal -->
   <div id="adModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex flex-col items-center justify-center p-4 text-center">
     <div class="max-w-sm w-full bg-slate-900 border border-slate-800 p-5 rounded-3xl shadow-2xl space-y-4">
       <div class="space-y-1">
@@ -143,7 +143,6 @@
         <p class="text-xs text-emerald-400 font-semibold" id="adCountdownText">தயவுசெய்து 10 விநாடிகள் காத்திருக்கவும்</p>
       </div>
       <div class="w-full max-w-[320px] min-h-[100px] mx-auto bg-slate-950 border border-slate-800/80 rounded-xl flex items-center justify-center p-2 overflow-hidden">
-        <!-- New Native Ad Container -->
         <div id="container-fe4c7de6c8528516275d9e0d1f7f22ac" class="w-full flex items-center justify-center"></div>
       </div>
       <button id="btnSkipAd" onclick="closeAdAndStartQuiz()" disabled class="w-full bg-slate-800 text-slate-500 font-bold py-3 rounded-xl transition text-xs flex items-center justify-center gap-1.5 cursor-not-allowed">
@@ -152,7 +151,7 @@
     </div>
   </div>
 
-  <!-- Sticky Bottom Adsterra Banner (With New 320x50 Ad Key) -->
+  <!-- Sticky Bottom Adsterra Banner -->
   <div class="fixed bottom-0 left-0 right-0 z-40 bg-slate-950/95 border-t border-slate-800 py-1 flex flex-col items-center justify-center shadow-2xl backdrop-blur-md min-h-[60px]">
     <span class="text-[8px] text-slate-500 tracking-wider uppercase mb-0.5">Advertisement</span>
     <div class="w-full max-w-[320px] h-[50px] flex items-center justify-center overflow-hidden">
@@ -178,7 +177,7 @@
       </div>
 
       <div id="adminAuthSection" class="space-y-3">
-        <p class="text-xs text-slate-400">புதிய வினாக்களைச் சேர்க்க அல்லது நிர்வகிக்க கடவுச்சொல்லை உள்ளிடவும்.</p>
+        <p class="text-xs text-slate-400">நிர்வாக வசதிகளைப் பயன்படுத்த கடவுச்சொல்லை உள்ளிடவும்.</p>
         <input type="password" id="adminPassInput" placeholder="கடவுச்சொல் (Password)" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-sm outline-none focus:border-emerald-500 text-slate-100">
         <div class="flex gap-2">
           <button onclick="checkAdminPass()" class="flex-1 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-2 rounded-lg text-sm">உள்நுழை</button>
@@ -189,19 +188,34 @@
       <div id="adminPanelSection" class="hidden space-y-4">
         <!-- 3 Tabs Navigation -->
         <div class="flex gap-1.5 border-b border-slate-800 pb-2">
-          <button id="tabBulkBtn" onclick="switchAdminTab('bulk')" class="flex-1 py-1.5 text-[11px] font-bold rounded-lg bg-emerald-500 text-slate-950">Bulk Import</button>
-          <button id="tabManageBtn" onclick="switchAdminTab('manage')" class="flex-1 py-1.5 text-[11px] font-bold rounded-lg bg-slate-800 text-slate-300">தேர்வுப் பெயர் மாற்று</button>
+          <button id="tabBulkBtn" onclick="switchAdminTab('bulk')" class="flex-1 py-1.5 text-[11px] font-bold rounded-lg bg-emerald-500 text-slate-950">பல்க் அப்லோட்</button>
+          <button id="tabManageBtn" onclick="switchAdminTab('manage')" class="flex-1 py-1.5 text-[11px] font-bold rounded-lg bg-slate-800 text-slate-300">நிர்வாகம் & பெயர்/நீக்கு</button>
           <button id="tabSingleBtn" onclick="switchAdminTab('single')" class="flex-1 py-1.5 text-[11px] font-bold rounded-lg bg-slate-800 text-slate-300">தனி வினா</button>
         </div>
 
-        <!-- Tab 1: Bulk Import -->
+        <!-- Tab 1: Smart Bulk Import (Dropdown Based) -->
         <div id="bulkImportTab" class="space-y-3">
-          <p class="text-[11px] text-slate-400">Gemini கொடுக்கும் JSON Code-ஐ கீழே ஒட்டவும் (நேரடியாக Firebase-ல் சேரும்):</p>
-          <textarea id="bulkJsonInput" placeholder='[&#10;  {&#10;    "category": "இந்திய வரலாறு",&#10;    "topic": "குப்தர்கள்",&#10;    "testName": "குப்தர் பேரரசு - முழுத் தேர்வு",&#10;    "question": "வினா...",&#10;    "options": ["A", "B", "C", "D"],&#10;    "answer": 0,&#10;    "explanation": "விளக்கம்..."&#10;  }&#10;]' class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs h-44 text-emerald-300 font-mono outline-none focus:border-emerald-500"></textarea>
-          <button id="btnBulkUpload" onclick="importBulkQuestions()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs shadow-lg transition">வினாக்களை கிளவுடில் ஏற்று (Upload to Cloud)</button>
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2">
+            <label class="text-[11px] text-slate-400 font-semibold block">1. முதன்மைப் பாடம் (Category):</label>
+            <select id="bulkCategorySelect" onchange="updateBulkTopicDropdown()" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-emerald-400 font-bold outline-none"></select>
+
+            <label class="text-[11px] text-slate-400 font-semibold block mt-1.5">2. துணைத்தலைப்பு (Topic):</label>
+            <select id="bulkTopicSelect" onchange="checkBulkCustomTopic(this.value)" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-slate-200 font-semibold outline-none"></select>
+            <input type="text" id="bulkCustomTopicInput" placeholder="புதிய துணைத்தலைப்பின் பெயர்..." class="hidden w-full bg-slate-900 border border-emerald-500 rounded-lg p-2 text-xs text-emerald-300 outline-none mt-1">
+
+            <label class="text-[11px] text-slate-400 font-semibold block mt-1.5">3. தேர்வின் பெயர் (Test Name):</label>
+            <input type="text" id="bulkTestNameInput" placeholder="எ.கா: மாதிரித் தேர்வு 1 அல்லது குப்தர்கள்" value="மாதிரித் தேர்வு 1" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-slate-200 font-semibold outline-none">
+          </div>
+
+          <div>
+            <label class="text-[11px] text-slate-400 font-semibold block mb-1">4. வினாக்களின் JSON குறியீடு (JSON Code):</label>
+            <textarea id="bulkJsonInput" placeholder='[&#10;  {&#10;    "question": "வினா...",&#10;    "options": ["A", "B", "C", "D"],&#10;    "answer": 0,&#10;    "explanation": "விளக்கம்..."&#10;  }&#10;]' class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs h-36 text-emerald-300 font-mono outline-none focus:border-emerald-500"></textarea>
+          </div>
+
+          <button id="btnBulkUpload" onclick="importSmartBulkQuestions()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs shadow-lg transition">மேலே உள்ள தலைப்பில் வினாக்களை ஏற்று (Upload)</button>
         </div>
 
-        <!-- Tab 2: Manage / Rename Tests -->
+        <!-- Tab 2: Manage / Rename / Delete Tests -->
         <div id="manageTab" class="hidden space-y-3">
           <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2">
             <label class="text-[11px] text-slate-400 font-semibold block">1. பாடப்பிரிவு (Category):</label>
@@ -213,7 +227,7 @@
 
           <div class="space-y-2">
             <h4 class="text-xs font-bold text-slate-300">இங்குள்ள தேர்வுகள் (Tests):</h4>
-            <div id="manageTestsList" class="space-y-2 max-h-48 overflow-y-auto pr-1"></div>
+            <div id="manageTestsList" class="space-y-2 max-h-56 overflow-y-auto pr-1"></div>
           </div>
         </div>
 
@@ -657,6 +671,7 @@
       if (entered === "Vrsd8773") {
         document.getElementById('adminAuthSection').classList.add('hidden');
         document.getElementById('adminPanelSection').classList.remove('hidden');
+        initBulkCategoryDropdown();
         initManageCategoryDropdown();
         updateTopicDropdown();
       } else {
@@ -684,6 +699,7 @@
       if (tab === 'bulk') {
         bulkTab.classList.remove('hidden');
         btnBulk.className = "flex-1 py-1.5 text-[11px] font-bold rounded-lg bg-emerald-500 text-slate-950";
+        initBulkCategoryDropdown();
       } else if (tab === 'manage') {
         manageTab.classList.remove('hidden');
         btnManage.className = "flex-1 py-1.5 text-[11px] font-bold rounded-lg bg-emerald-500 text-slate-950";
@@ -695,6 +711,114 @@
       }
     }
 
+    // --- 1. SMART BULK IMPORT DROPDOWNS ---
+    function initBulkCategoryDropdown() {
+      const catSelect = document.getElementById('bulkCategorySelect');
+      catSelect.innerHTML = '';
+      categoriesData.forEach(cat => {
+        const opt = document.createElement('option');
+        opt.value = cat.id;
+        opt.textContent = cat.title;
+        catSelect.appendChild(opt);
+      });
+      updateBulkTopicDropdown();
+    }
+
+    function updateBulkTopicDropdown() {
+      const selectedCat = document.getElementById('bulkCategorySelect').value;
+      const topicSelect = document.getElementById('bulkTopicSelect');
+      topicSelect.innerHTML = '';
+
+      const predefinedTopics = syllabusMaster[selectedCat] || [];
+      const catQuestions = questions.filter(q => q.category === selectedCat);
+      const userAddedTopics = Array.from(new Set(catQuestions.map(q => q.topic).filter(t => t && !predefinedTopics.includes(t))));
+      const combinedTopics = [...predefinedTopics, ...userAddedTopics];
+
+      combinedTopics.forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t;
+        opt.textContent = t;
+        topicSelect.appendChild(opt);
+      });
+
+      const newOpt = document.createElement('option');
+      newOpt.value = "__NEW_BULK__";
+      newOpt.textContent = "➕ புதிய துணைத்தலைப்பை உருவாக்கு...";
+      topicSelect.appendChild(newOpt);
+
+      checkBulkCustomTopic(topicSelect.value);
+    }
+
+    function checkBulkCustomTopic(val) {
+      const customInput = document.getElementById('bulkCustomTopicInput');
+      if (val === "__NEW_BULK__") {
+        customInput.classList.remove('hidden');
+        customInput.focus();
+      } else {
+        customInput.classList.add('hidden');
+      }
+    }
+
+    function importSmartBulkQuestions() {
+      const cat = document.getElementById('bulkCategorySelect').value;
+      let topic = document.getElementById('bulkTopicSelect').value;
+
+      if (topic === "__NEW_BULK__") {
+        topic = document.getElementById('bulkCustomTopicInput').value.trim();
+        if (!topic) {
+          alert("புதிய துணைத்தலைப்பின் பெயரை உள்ளிடவும்!");
+          return;
+        }
+      }
+
+      const testName = document.getElementById('bulkTestNameInput').value.trim() || "மாதிரித் தேர்வு 1";
+      const rawText = document.getElementById('bulkJsonInput').value.trim();
+
+      if (!rawText) {
+        alert("வினாக்கள் உள்ள JSON குறியீட்டை ஒட்டவும்!");
+        return;
+      }
+
+      try {
+        const parsed = JSON.parse(rawText);
+        if (!Array.isArray(parsed)) {
+          alert("தவறான குறியீடு! இது ஒரு Array [...] ஆக இருக்க வேண்டும்.");
+          return;
+        }
+
+        const btn = document.getElementById('btnBulkUpload');
+        btn.disabled = true;
+        btn.textContent = "பதிவேற்றப்படுகிறது...";
+
+        const updates = {};
+        parsed.forEach(item => {
+          // நீங்கள் தேர்ந்தெடுத்த Category, Topic, TestName ஆகியவை தானாகப் பொருத்தப்படும்!
+          item.category = cat;
+          item.topic = topic;
+          item.testName = testName;
+
+          const newKey = questionsRef.push().key;
+          updates[newKey] = item;
+        });
+
+        questionsRef.update(updates).then(() => {
+          alert(`வெற்றி! "${cat} ➔ ${topic} ➔ ${testName}" பகுதிக்குள் ${parsed.length} வினாக்கள் நேரடியாகச் சேர்க்கப்பட்டன!`);
+          document.getElementById('bulkJsonInput').value = '';
+          btn.disabled = false;
+          btn.textContent = "மேலே உள்ள தலைப்பில் வினாக்களை ஏற்று (Upload)";
+          closeAdmin();
+        }).catch(err => {
+          alert("பதிவேற்றுவதில் பிழை: " + err.message);
+          btn.disabled = false;
+          btn.textContent = "மேலே உள்ள தலைப்பில் வினாக்களை ஏற்று (Upload)";
+        });
+
+      } catch (e) {
+        alert("JSON குறியீட்டில் பிழை உள்ளது! Gemini கொடுத்த Code-ஐ முழுமையாக நகலெடுத்து ஒட்டவும்.");
+      }
+    }
+
+    // --- 2. MANAGE / RENAME / DELETE TESTS ---
     function initManageCategoryDropdown() {
       const catSelect = document.getElementById('manageCategorySelect');
       catSelect.innerHTML = '';
@@ -748,15 +872,18 @@
 
       tests.forEach(testName => {
         const row = document.createElement('div');
-        row.className = "flex items-center justify-between p-2.5 rounded-lg bg-slate-950 border border-slate-800 text-xs";
+        row.className = "flex items-center justify-between p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs";
         row.innerHTML = `
-          <div class="truncate max-w-[200px]">
-            <span class="font-bold text-slate-200">${testName}</span>
+          <div class="truncate max-w-[160px]">
+            <span class="font-bold text-slate-200 block truncate">${testName}</span>
             <span class="text-[10px] text-emerald-400 block">${testMap[testName]} வினாக்கள்</span>
           </div>
-          <div class="flex gap-2">
-            <button onclick="promptRenameTest('${selCat}', '${selTopic}', '${testName}')" class="px-2.5 py-1 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded font-bold hover:bg-emerald-500 hover:text-slate-950 transition">
-              <i class="fa-solid fa-pen-to-square"></i> பெயர் மாற்று
+          <div class="flex gap-1.5 flex-shrink-0">
+            <button onclick="promptRenameTest('${selCat}', '${selTopic}', '${testName}')" class="px-2.5 py-1 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-lg font-bold hover:bg-emerald-500 hover:text-slate-950 transition">
+              <i class="fa-solid fa-pen-to-square"></i> பெயர்
+            </button>
+            <button onclick="deleteEntireTest('${selCat}', '${selTopic}', '${testName}', ${testMap[testName]})" class="px-2.5 py-1 bg-rose-500/20 text-rose-400 border border-rose-500/30 rounded-lg font-bold hover:bg-rose-500 hover:text-white transition">
+              <i class="fa-solid fa-trash-can"></i> நீக்கு
             </button>
           </div>
         `;
@@ -783,18 +910,48 @@
       }
 
       if (count === 0) {
-        alert("மாற்றுவதற்கு வினாக்கள் எதுவும் கிடைக்கவில்லை!");
+        alert("மாற்றுவதற்கு வினாக்கள் கிடைக்கவில்லை!");
         return;
       }
 
       questionsRef.update(updates).then(() => {
-        alert(`வெற்றி! "${oldName}" என்ற தேர்வு "${trimmedNewName}" என மாற்றப்பட்டது (${count} வினாக்கள் புதுப்பிக்கப்பட்டன).`);
+        alert(`வெற்றி! "${oldName}" தேர்வு "${trimmedNewName}" என மாற்றப்பட்டது.`);
         loadManageTests();
       }).catch(err => {
         alert("பிழை: " + err.message);
       });
     }
 
+    // மொத்தத் தேர்வையும் (அதில் உள்ள அனைத்து வினாக்களையும்) டெலீட் செய்யும் வசதி
+    function deleteEntireTest(category, topic, testName, qCount) {
+      const confirmDelete = confirm(`எச்சரிக்கை: "${testName}" தேர்வில் உள்ள ${qCount} வினாக்களையும் நிரந்தரமாக நீக்கவா?`);
+      if (!confirmDelete) return;
+
+      const updates = {};
+      let count = 0;
+
+      for (let key in cloudRawData) {
+        const q = cloudRawData[key];
+        if (q.category === category && q.topic === topic && (q.testName || "தேர்வு 1") === testName) {
+          updates[key] = null; // Firebase-ல் null கொடுத்தால் அந்த வினா நிரந்தரமாக நீக்கப்படும்
+          count++;
+        }
+      }
+
+      if (count === 0) {
+        alert("நீக்குவதற்கு வினாக்கள் எதுவும் கிடைக்கவில்லை!");
+        return;
+      }
+
+      questionsRef.update(updates).then(() => {
+        alert(`வெற்றி! "${testName}" தேர்வின் ${count} வினாக்களும் வெற்றிகரமாக நீக்கப்பட்டன.`);
+        loadManageTests();
+      }).catch(err => {
+        alert("நீக்குவதில் பிழை: " + err.message);
+      });
+    }
+
+    // --- 3. SINGLE QUESTION LOGIC ---
     function updateTopicDropdown() {
       const selectedCat = document.getElementById('newCategory').value;
       const topicSelect = document.getElementById('newTopicSelect');
@@ -814,7 +971,7 @@
 
       const newOpt = document.createElement('option');
       newOpt.value = "__NEW__";
-      newOpt.textContent = "➕ புதிய துணைத்தலைப்பை உருவாக்கு (+ New Topic)";
+      newOpt.textContent = "➕ புதிய துணைத்தலைப்பை உருவாக்கு...";
       topicSelect.appendChild(newOpt);
 
       checkCustomTopic(topicSelect.value);
@@ -827,49 +984,6 @@
         customInput.focus();
       } else {
         customInput.classList.add('hidden');
-      }
-    }
-
-    function importBulkQuestions() {
-      const rawText = document.getElementById('bulkJsonInput').value.trim();
-      if (!rawText) {
-        alert("குறியீட்டை உள்ளிடவும்!");
-        return;
-      }
-
-      try {
-        const parsed = JSON.parse(rawText);
-        if (!Array.isArray(parsed)) {
-          alert("தவறான குறியீடு! இது ஒரு Array [...] ஆக இருக்க வேண்டும்.");
-          return;
-        }
-
-        const btn = document.getElementById('btnBulkUpload');
-        btn.disabled = true;
-        btn.textContent = "கிளவுடில் சேமிக்கப்படுகிறது (Uploading...)...";
-
-        const updates = {};
-        parsed.forEach(item => {
-          if (!item.topic) item.topic = "பொதுவான வினாக்கள்";
-          if (!item.testName) item.testName = "தேர்வு 1";
-          const newKey = questionsRef.push().key;
-          updates[newKey] = item;
-        });
-
-        questionsRef.update(updates).then(() => {
-          alert(`அற்புதம்! ${parsed.length} வினாக்கள் நேரடியாக Firebase கிளவுடில் பதிவேற்றப்பட்டன!`);
-          document.getElementById('bulkJsonInput').value = '';
-          btn.disabled = false;
-          btn.textContent = "வினாக்களை கிளவுடில் ஏற்று (Upload to Cloud)";
-          closeAdmin();
-        }).catch(err => {
-          alert("பதிவேற்றுவதில் பிழை: " + err.message);
-          btn.disabled = false;
-          btn.textContent = "வினாக்களை கிளவுடில் ஏற்று (Upload to Cloud)";
-        });
-
-      } catch (e) {
-        alert("JSON குறியீட்டில் பிழை உள்ளது! Gemini கொடுத்த Code-ஐ முழுமையாக நகலெடுத்து ஒட்டவும்.");
       }
     }
 
