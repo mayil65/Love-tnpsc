@@ -11,8 +11,8 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
-  <!-- Adsterra Native Banner Script -->
-  <script async="async" data-cfasync="false" src="https://pl31563094.profitableratecpmnetwork.com/6213eba496f9b6468c4bf0e6f2e97efa/invoke.js"></script>
+  <!-- New Adsterra Native Banner Script -->
+  <script async="async" data-cfasync="false" src="https://pl31633340.profitableratecpmnetwork.com/b5b9bff8cbd2a2e1b663a37d16687ed5/invoke.js"></script>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans select-none pb-24">
 
@@ -134,7 +134,7 @@
 
   </main>
 
-  <!-- Clean In-Screen Ad Modal -->
+  <!-- Clean In-Screen Ad Modal (With New Native Banner Container) -->
   <div id="adModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex flex-col items-center justify-center p-4 text-center">
     <div class="max-w-sm w-full bg-slate-900 border border-slate-800 p-5 rounded-3xl shadow-2xl space-y-4">
       <div class="space-y-1">
@@ -143,7 +143,8 @@
         <p class="text-xs text-emerald-400 font-semibold" id="adCountdownText">தயவுசெய்து 10 விநாடிகள் காத்திருக்கவும்</p>
       </div>
       <div class="w-full max-w-[320px] min-h-[100px] mx-auto bg-slate-950 border border-slate-800/80 rounded-xl flex items-center justify-center p-2 overflow-hidden">
-        <div id="container-6213eba496f9b6468c4bf0e6f2e97efa" class="w-full flex items-center justify-center"></div>
+        <!-- New Native Ad Container -->
+        <div id="container-b5b9bff8cbd2a2e1b663a37d16687ed5" class="w-full flex items-center justify-center"></div>
       </div>
       <button id="btnSkipAd" onclick="closeAdAndStartQuiz()" disabled class="w-full bg-slate-800 text-slate-500 font-bold py-3 rounded-xl transition text-xs flex items-center justify-center gap-1.5 cursor-not-allowed">
         <i class="fa-solid fa-clock"></i> <span>காத்திருக்கவும் (10s)...</span>
@@ -151,20 +152,20 @@
     </div>
   </div>
 
-  <!-- Sticky Bottom Adsterra Banner -->
+  <!-- Sticky Bottom Adsterra Banner (With New 320x50 Ad Key) -->
   <div class="fixed bottom-0 left-0 right-0 z-40 bg-slate-950/95 border-t border-slate-800 py-1 flex flex-col items-center justify-center shadow-2xl backdrop-blur-md min-h-[60px]">
     <span class="text-[8px] text-slate-500 tracking-wider uppercase mb-0.5">Advertisement</span>
     <div class="w-full max-w-[320px] h-[50px] flex items-center justify-center overflow-hidden">
       <script>
         atOptions = {
-          'key' : '853486a16277f98252f9b41931818810',
+          'key' : 'a666f03250a9aeff75078a949881a1e0',
           'format' : 'iframe',
           'height' : 50,
           'width' : 320,
           'params' : {}
         };
       </script>
-      <script src="https://www.highrevenueformat.com/853486a16277f98252f9b41931818810/invoke.js"></script>
+      <script src="https://www.highrevenueformat.com/a666f03250a9aeff75078a949881a1e0/invoke.js"></script>
     </div>
   </div>
 
@@ -196,7 +197,7 @@
         <!-- Tab 1: Bulk Import -->
         <div id="bulkImportTab" class="space-y-3">
           <p class="text-[11px] text-slate-400">Gemini கொடுக்கும் JSON Code-ஐ கீழே ஒட்டவும் (நேரடியாக Firebase-ல் சேரும்):</p>
-          <textarea id="bulkJsonInput" placeholder='[&#10;  {&#10;    "category": "இந்திய வரலாறு",&#10;    "topic": "இந்திய தேசிய இயக்கம் & தலைவர்கள்",&#10;    "testName": "காங்கிரஸின் ஆரம்ப காலம்",&#10;    "question": "வினா...",&#10;    "options": ["A", "B", "C", "D"],&#10;    "answer": 0,&#10;    "explanation": "விளக்கம்..."&#10;  }&#10;]' class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs h-44 text-emerald-300 font-mono outline-none focus:border-emerald-500"></textarea>
+          <textarea id="bulkJsonInput" placeholder='[&#10;  {&#10;    "category": "இந்திய வரலாறு",&#10;    "topic": "குப்தர்கள்",&#10;    "testName": "குப்தர் பேரரசு - முழுத் தேர்வு",&#10;    "question": "வினா...",&#10;    "options": ["A", "B", "C", "D"],&#10;    "answer": 0,&#10;    "explanation": "விளக்கம்..."&#10;  }&#10;]' class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs h-44 text-emerald-300 font-mono outline-none focus:border-emerald-500"></textarea>
           <button id="btnBulkUpload" onclick="importBulkQuestions()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs shadow-lg transition">வினாக்களை கிளவுடில் ஏற்று (Upload to Cloud)</button>
         </div>
 
@@ -241,7 +242,7 @@
           </div>
 
           <div>
-            <label class="text-[11px] text-slate-300 font-semibold block mb-1">தேர்வின் பெயர் (எ.கா: தேர்வு 1, காங்கிரஸின் ஆரம்ப காலம்):</label>
+            <label class="text-[11px] text-slate-300 font-semibold block mb-1">தேர்வின் பெயர்:</label>
             <input type="text" id="newTestName" placeholder="எ.கா: தேர்வு 1" value="தேர்வு 1" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-200 font-semibold outline-none">
           </div>
 
@@ -270,7 +271,6 @@
   </div>
 
   <script>
-    // உங்கள் உண்மையான Firebase Configuration
     const firebaseConfig = {
       apiKey: "AIzaSyB9c-xdK0ur_0TmCuvN_-xuU976FZflqlE",
       authDomain: "lovetnspc.firebaseapp.com",
@@ -289,7 +289,7 @@
     const syllabusMaster = {
       "பொதுத்தமிழ்": ["பகுதி - அ: இலக்கணம்", "பகுதி - ஆ: இலக்கியம்", "பகுதி - இ: தமிழ் அறிஞர்களும் தமிழ்த் தொண்டும்"],
       "இந்திய ஆட்சியியல்": ["அரசியலமைப்பு உருவாக்கம் & முகப்புரை", "குடியுரிமை & அடிப்படை உரிமைகள், கடமைகள்", "மாநில அரசு & உள்ளாட்சி அமைப்புகள் (பஞ்சாயத்து)", "மத்திய அரசு (நாடாளுமன்றம் & அமைச்சரவை)", "நீதித்துறை (உச்ச & உயர் நீதிமன்றங்கள்)", "தேர்தல் ஆணையம் & ஊழல் தடுப்பு (லோக் ஆயுக்தா)"],
-      "இந்திய வரலாறு": ["சிந்துவெளி நாகரிகம் & குப்தர்கள்", "டெல்லி சுல்தான்கள் & முகலாயர்கள்", "மராத்தியர்கள் & விஜயநகரப் பேரரசு", "1857 பெரும் புரட்சி & தொடக்க எழுச்சிகள்", "இந்திய தேசிய இயக்கம் & தலைவர்கள்"],
+      "இந்திய வரலாறு": ["சிந்துவெளி நாகரிகம் & குப்தர்கள்", "சிந்துவெளி நாகரிகம் அவுட்சோர்ஸ் வினாக்கள்", "குப்தர்கள்", "டெல்லி சுல்தான்கள் & முகலாயர்கள்", "மராத்தியர்கள் & விஜயநகரப் பேரரசு", "1857 பெரும் புரட்சி & தொடக்க எழுச்சிகள்", "இந்திய தேசிய இயக்கம் & தலைவர்கள்"],
       "தமிழ்நாடு மரபு & பண்பாடு": ["தமிழ் சமுதாய வரலாறு & தொல்லியல் சான்றுகள்", "திருக்குறள் (வாழ்வியல் & சமூக கருத்துக்கள்)", "விடுதலைப் போராட்டத்தில் தமிழ்நாட்டின் பங்கு", "19 & 20-ஆம் நூற்றாண்டு சமூக இயக்கங்கள் (நீதிக்கட்சி & சுயமரியாதை)"],
       "தமிழ்நாடு நிர்வாகம்": ["மனிதவள மேம்பாட்டுக் குறியீடுகள் (HDI)", "சமூக நீதியும் சமூக நல்லிணக்கமும்", "தமிழக அரசின் நலத்திட்டங்கள் & கல்வி முறை", "மின்னாளுமை (E-Governance in TN)"],
       "இந்தியப் பொருளாதாரம்": ["இந்தியப் பொருளாதாரத்தின் இயல்புகள்", "ஐந்தாண்டுத் திட்டங்கள் & நிதி ஆயோக் (NITI Aayog)", "ரிசர்வ் வங்கி (RBI) & நிதி ஆணையம்", "சரக்கு மற்றும் சேவை வரி (GST)", "வேலைவாய்ப்பு & ஊரக நலம்"],
@@ -313,7 +313,7 @@
     ];
 
     let questions = [];
-    let cloudRawData = {}; // Firebase keys tracking for updates
+    let cloudRawData = {};
     let currentCategory = "";
     let currentTopic = "";
     let currentTest = "";
@@ -323,7 +323,6 @@
     let adTimer = null;
     let pendingTest = "";
 
-    // Firebase Listener
     questionsRef.on('value', (snapshot) => {
       const data = snapshot.val();
       cloudRawData = data || {};
@@ -696,7 +695,6 @@
       }
     }
 
-    // --- MANAGE / RENAME TEST LOGIC ---
     function initManageCategoryDropdown() {
       const catSelect = document.getElementById('manageCategorySelect');
       catSelect.innerHTML = '';
@@ -797,7 +795,6 @@
       });
     }
 
-    // Single Question Dropdown
     function updateTopicDropdown() {
       const selectedCat = document.getElementById('newCategory').value;
       const topicSelect = document.getElementById('newTopicSelect');
@@ -833,7 +830,6 @@
       }
     }
 
-    // Bulk Import Logic
     function importBulkQuestions() {
       const rawText = document.getElementById('bulkJsonInput').value.trim();
       if (!rawText) {
@@ -877,7 +873,6 @@
       }
     }
 
-    // Save Single Question
     function saveQuestion() {
       const cat = document.getElementById('newCategory').value;
       const topicChoice = document.getElementById('newTopicSelect').value;
